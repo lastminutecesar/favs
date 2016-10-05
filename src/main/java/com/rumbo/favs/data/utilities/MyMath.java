@@ -5,9 +5,14 @@ import java.text.DecimalFormat;
 public class MyMath {
 
 	public static String getRoundedFloat(float number){
-			
-			String aux;
-			String separator = ".";
+		
+		System.out.println("NUMBER: " + number);
+		
+		String aux = "";
+		
+		if (number > 0){			
+
+			String separator = ",";
 			String pattern = "00";
 			
 			DecimalFormat df = new DecimalFormat();
@@ -19,10 +24,15 @@ public class MyMath {
 			
 			String[] parts = aux.split(separator);
 			
-			if (pattern.equals(parts[1])){
-				return parts[0];
-			}else{
-				return aux;
-			}		
+			if (parts.length > 0){
+				if (pattern.equals(parts[1])){
+					return parts[0];
+				}else{
+					return aux;
+				}	
+			}						
 		}
+		return aux;	
+	}	
+		
 }
