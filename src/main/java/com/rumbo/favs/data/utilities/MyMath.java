@@ -6,9 +6,6 @@ import java.text.DecimalFormatSymbols;
 public class MyMath {
 
 	public static String getRoundedFloat(float number){
-		
-		System.out.println("NUMBER: " + number);
-		
 		String aux = "";
 		
 		if (number > 0){			
@@ -24,14 +21,10 @@ public class MyMath {
 		    dfs.setGroupingSeparator('.');
 		    
 		    df.setDecimalFormatSymbols(dfs);
-		    
-			
 			df.setMaximumFractionDigits(2);
 			df.setMinimumFractionDigits(2);
 			
 			aux = df.format(number);
-			
-			System.out.println("NUMBER2: " + aux);
 			
 			String[] parts = aux.split(separator);
 			
