@@ -21,8 +21,10 @@ public class MyMath {
 			DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
 
 		    dfs.setDecimalSeparator(',');
+		    dfs.setGroupingSeparator(' ');
 		    
 		    df.setDecimalFormatSymbols(dfs);
+		    
 			
 			df.setMaximumFractionDigits(2);
 			df.setMinimumFractionDigits(2);
