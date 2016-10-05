@@ -1,6 +1,7 @@
 package com.rumbo.favs.data.utilities;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class MyMath {
 
@@ -12,16 +13,23 @@ public class MyMath {
 		
 		if (number > 0){			
 
-			String separator = ".";
+			String separator = ",";
 			String pattern = "00";
 			String patternBis = "0";
 			
 			DecimalFormat df = new DecimalFormat();
+			DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+
+		    dfs.setDecimalSeparator(',');
+		    
+		    df.setDecimalFormatSymbols(dfs);
 			
 			df.setMaximumFractionDigits(2);
 			df.setMinimumFractionDigits(2);
 			
 			aux = df.format(number);
+			
+			System.out.println("NUMBER2: " + aux);
 			
 			String[] parts = aux.split(separator);
 			
