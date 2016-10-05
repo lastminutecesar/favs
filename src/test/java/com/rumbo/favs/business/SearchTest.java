@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +17,6 @@ import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
 import com.rumbo.favs.business.services.ISearchEngine;
 import com.rumbo.favs.business.services.impl.SearchEngineImpl;
 import com.rumbo.favs.data.utilities.MyMath;
-import com.rumbo.favs.data.utilities.ReadCsv;
 
 public class SearchTest {
 	
@@ -60,21 +57,9 @@ public class SearchTest {
 	@BeforeClass
 	public static void initialize()
 	{
-		ReadCsv.loadFiles();
-	}
-	
-	@AfterClass
-	public static void close()
-	{
-		ReadCsv.cleanXmlFiles();
-	}
-	
-	@Before
-	public void beforeTest()
-	{
 		searchEngine = new SearchEngineImpl();
 	}
-	
+		
 	@Rule
     public ExpectedException thrown = ExpectedException.none();	
 	
@@ -161,7 +146,7 @@ public class SearchTest {
 	public void test9() {
 		try{
 			System.out.println("TEST 9");
-			AvailabilityResult availabilityResult = searchEngine.search("AMS", "FRA", 30, 1, 0, 0);		
+			AvailabilityResult availabilityResult = searchEngine.search("AMS", "FRA", 31, 1, 0, 0);		
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
 			assertThat(getFlights(availabilityResult), arrayContainingInAnyOrder("TK2372","TK2659","LH5909"));

@@ -1,36 +1,115 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.rumbo.favs.data.dao.IDaysToDepartureDateDao;
-import com.rumbo.favs.data.dao.IInfantPricesDao;
 import com.rumbo.favs.data.entities.DaysToDepartureDate;
-import com.rumbo.favs.data.entities.InfantPrice;
+import com.rumbo.favs.data.entities.DaysToDepartureDateGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
-import com.rumbo.favs.data.utilities.ReadCsv;
 
 /**
  * Infant Price DAO
  * 
  */
 public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
+	
+	private Node nodeDaysToDepartureDate = null;
+	
+	private final String DAYSTODEPARTUREDATEFILE = "daysToDepartureDateFile";
+	
+	private final String CSVEXTENSION = ".csv";
+	
+	public DaysToDepartureDateDaoImpl(){
+		loadFile();
+	}
 
+	/**
+	 * Write xml files from csv files
+	 * 
+	 * Get all files from files.Properties
+	 * 
+	 */
+	private void loadFile(){
+		
+		ManageProperties manageProperties = new ManageProperties();
+		
+		String csvFileResourceFolder = manageProperties.getConfigProperty(ManageProperties.CSV_FILE_RESOURCE_FOLDER);
+		
+		if (csvFileResourceFolder != null && !csvFileResourceFolder.isEmpty()){			
+			String daysToDepartureDateFile = manageProperties.getFilesProperty(DAYSTODEPARTUREDATEFILE);			
+			if (daysToDepartureDateFile != null && !daysToDepartureDateFile.isEmpty()){
+				csvToXmlDaysToDepartureDate(csvFileResourceFolder + daysToDepartureDateFile + CSVEXTENSION);
+			}
+		}		
+	}	
+	
+	private void csvToXmlDaysToDepartureDate(String csvFile) {
+		
+		if (csvFile != null && !csvFile.isEmpty()){
+			
+			BufferedReader br = null;
+			String line = "";
+			String splitBy = ",";
+			DaysToDepartureDateGroup daysToDepartureDateGroup = new DaysToDepartureDateGroup();
+
+			// Read csv file
+			try {				
+				br = new BufferedReader(new FileReader(csvFile));
+				while ((line = br.readLine()) != null) {
+					String[] csvDaysToDepartureDate = line.split(splitBy);
+					DaysToDepartureDate daysToDepartureDate = 
+							new DaysToDepartureDate(csvDaysToDepartureDate[0],csvDaysToDepartureDate[1],csvDaysToDepartureDate[2]);
+					daysToDepartureDateGroup.getDaysToDepartureDateGroup().add(daysToDepartureDate);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			// Write xml file with JAXB
+			try {
+				JAXBContext jaxbContext = JAXBContext.newInstance(DaysToDepartureDateGroup.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+				DOMResult res = new DOMResult();
+				jaxbMarshaller.marshal(daysToDepartureDateGroup, res);
+				
+				if (res != null){
+					setNodeDaysToDepartureDate(res.getNode());
+				}
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Get infant price by airline
 	 * 
@@ -38,33 +117,14 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	 */
 	public DaysToDepartureDate getDiscountPercent(int days) {
 		
-		DaysToDepartureDate daysToDepartureDate = new DaysToDepartureDate();
-		
-		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		Document document = null;
-				
-		try {
-			ManageProperties manageProperties = new ManageProperties();
-			
-			String xmlDaysToDepartureDateFile = manageProperties.getFilesProperty(ReadCsv.DAYSTODEPARTUREDATEFILE);
-			String fileResourceFolder = manageProperties.getConfigProperty(ManageProperties.XML_FILE_RESOURCE_FOLDER);
-			
-			if (fileResourceFolder != null && !fileResourceFolder.isEmpty() &&
-					xmlDaysToDepartureDateFile != null && !xmlDaysToDepartureDateFile.isEmpty()){
-			
-			    builder = builderFactory.newDocumentBuilder();
-			    
-				// First time I create xml file, if I try to get it 
-				// through ClassLoader, don't get it, so I do this
-			    document = builder.parse(new FileInputStream(fileResourceFolder + xmlDaysToDepartureDateFile + ReadCsv.XMLEXTENSION));
+		try {			
+			if (getNodeDaysToDepartureDate() != null){
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
 			    //Query
-				//String expression = "/daysToDepartureDateGroup/daysToDepartureDate[" + IDaysToDepartureDateDao.MIN + ">=" + days + " and " + IDaysToDepartureDateDao.MAX + "<=" + days + "]";
 				String expression = "/daysToDepartureDateGroup/daysToDepartureDate[" + IDaysToDepartureDateDao.MIN + "<=" + days + " and " + IDaysToDepartureDateDao.MAX + ">=" + days + "]";	
-				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
+				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeDaysToDepartureDate(), XPathConstants.NODESET);
 				
 				//None result
 				if (nodeList.getLength() == 0){
@@ -77,21 +137,13 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	               return getDaysToDepartureDate(element);
 	            }
             }            
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();			
-		} catch (ParserConfigurationException e) {
-		    e.printStackTrace();  
-		} catch (SAXException e) {
-		    e.printStackTrace();
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return daysToDepartureDate;
+		return null;
 	}
 	
 	/**
@@ -111,4 +163,13 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 		
 		return daysToDepartureDate;
 	}
+
+	public Node getNodeDaysToDepartureDate() {
+		return nodeDaysToDepartureDate;
+	}
+
+	public void setNodeDaysToDepartureDate(Node nodeDaysToDepartureDate) {
+		this.nodeDaysToDepartureDate = nodeDaysToDepartureDate;
+	}	
+	
 }

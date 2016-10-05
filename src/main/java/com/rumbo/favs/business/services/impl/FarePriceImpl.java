@@ -48,6 +48,10 @@ public class FarePriceImpl implements IFarePrice{
 
 	private String active = "1";
 	
+	public FarePriceImpl(){
+		
+	}
+	
 	/**
 	 * Return price's breakdown
 	 * 

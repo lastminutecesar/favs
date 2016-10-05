@@ -1,35 +1,115 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.data.dao.IDiscountByPassengerTypeDao;
-import com.rumbo.favs.data.dao.IInfantPricesDao;
 import com.rumbo.favs.data.entities.DiscountByPassengerType;
+import com.rumbo.favs.data.entities.DiscountByPassengerTypeGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
-import com.rumbo.favs.data.utilities.ReadCsv;
 
 /**
  * Infant Price DAO
  * 
  */
 public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeDao{
+	
+	private Node nodeDiscountByPassengerType = null;
+	
+	private final String DISCOUNTBYPASSENGERTYPEFILE = "discountByPassengerTypeFile";
+	
+	private final String CSVEXTENSION = ".csv";
+	
+	public DiscountByPassengerTypeDaoImpl(){
+		loadFile();
+	}
+	
+	/**
+	 * Write xml files from csv files
+	 * 
+	 * Get all files from files.Properties
+	 * 
+	 */
+	private void loadFile(){
+		
+		ManageProperties manageProperties = new ManageProperties();
+		
+		String csvFileResourceFolder = manageProperties.getConfigProperty(ManageProperties.CSV_FILE_RESOURCE_FOLDER);
+		
+		if (csvFileResourceFolder != null && !csvFileResourceFolder.isEmpty()){			
+			String daysToDepartureDateFile = manageProperties.getFilesProperty(DISCOUNTBYPASSENGERTYPEFILE);			
+			if (daysToDepartureDateFile != null && !daysToDepartureDateFile.isEmpty()){
+				csvToXmlDiscountByPassengerType(csvFileResourceFolder + daysToDepartureDateFile + CSVEXTENSION);
+			}
+		}		
+	}	
+	
+	private void csvToXmlDiscountByPassengerType(String csvFile) {
+		
+		if (csvFile != null && !csvFile.isEmpty() ){
+			
+			BufferedReader br = null;
+			String line = "";
+			String splitBy = ",";
+			DiscountByPassengerTypeGroup discountByPassengerTypeGroup = new DiscountByPassengerTypeGroup();
+
+			// Read csv file
+			try {				
+				br = new BufferedReader(new FileReader(csvFile));
+				while ((line = br.readLine()) != null) {
+					String[] csvDiscountByPassengerType = line.split(splitBy);
+					DiscountByPassengerType discountByPassengerType = 
+							new DiscountByPassengerType(csvDiscountByPassengerType[0],csvDiscountByPassengerType[1]);
+					discountByPassengerTypeGroup.getDiscountByPassengerTypeGroup().add(discountByPassengerType);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			// Write xml file with JAXB
+			try {
+				JAXBContext jaxbContext = JAXBContext.newInstance(DiscountByPassengerTypeGroup.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+				DOMResult res = new DOMResult();
+				jaxbMarshaller.marshal(discountByPassengerTypeGroup, res);
+
+				if (res != null){
+					setNodeDiscountByPassengerType(res.getNode());
+				}
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * Get infant price by airline
@@ -38,32 +118,14 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 	 */
 	public DiscountByPassengerType getDiscountPercent(PassengerType passengerType) {
 		
-		DiscountByPassengerType discountByPassengerType = new DiscountByPassengerType();
-		
-		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		Document document = null;
-				
-		try {
-			ManageProperties manageProperties = new ManageProperties();
-			
-			String xmlDiscountByPassengerTypeFile = manageProperties.getFilesProperty(ReadCsv.DISCOUNTBYPASSENGERTYPEFILE);
-			String fileResourceFolder = manageProperties.getConfigProperty(ManageProperties.XML_FILE_RESOURCE_FOLDER);
-			
-			if (fileResourceFolder != null && !fileResourceFolder.isEmpty() &&
-					xmlDiscountByPassengerTypeFile != null && !xmlDiscountByPassengerTypeFile.isEmpty()){
-			
-			    builder = builderFactory.newDocumentBuilder();
-			    
-				// First time I create xml file, if I try to get it 
-				// through ClassLoader, don't get it, so I do this
-			    document = builder.parse(new FileInputStream(fileResourceFolder + xmlDiscountByPassengerTypeFile + ReadCsv.XMLEXTENSION));
+		try {			
+			if (getNodeDiscountByPassengerType() != null){
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
 			    //Query
 				String expression = "/discountByPassengerTypeGroup/discountByPassengerType[" + IDiscountByPassengerTypeDao.PASSENGERTYPE + "='"+ passengerType.toString() + "']";		    
-				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
+				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeDiscountByPassengerType(), XPathConstants.NODESET);
 				
 				//None result
 				if (nodeList.getLength() == 0){
@@ -76,21 +138,13 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 	               return getDiscountByPassengerType(element);
 	            }
 			}            
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();			
-		} catch (ParserConfigurationException e) {
-		    e.printStackTrace();  
-		} catch (SAXException e) {
-		    e.printStackTrace();
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return discountByPassengerType;
+		return null;
 	}
 	
 	/**
@@ -109,4 +163,13 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 		
 		return discountByPassengerType;
 	}
+
+	public Node getNodeDiscountByPassengerType() {
+		return nodeDiscountByPassengerType;
+	}
+
+	public void setNodeDiscountByPassengerType(Node nodeDiscountByPassengerType) {
+		this.nodeDiscountByPassengerType = nodeDiscountByPassengerType;
+	}	
+	
 }

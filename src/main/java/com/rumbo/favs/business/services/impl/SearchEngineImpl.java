@@ -2,6 +2,8 @@ package com.rumbo.favs.business.services.impl;
 
 import java.util.List;
 
+import org.w3c.dom.Node;
+
 import com.rumbo.favs.business.bean.AvailabilityResult;
 import com.rumbo.favs.business.bean.FlightResult;
 import com.rumbo.favs.business.bean.ResultType;
@@ -9,7 +11,12 @@ import com.rumbo.favs.business.bean.SearchCriteria;
 import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
 import com.rumbo.favs.business.services.IFarePrice;
 import com.rumbo.favs.business.services.ISearchEngine;
+import com.rumbo.favs.data.dao.IAirportDao;
+import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
+import com.rumbo.favs.data.dao.IDaysToDepartureDateDao;
+import com.rumbo.favs.data.dao.IDiscountByPassengerTypeDao;
 import com.rumbo.favs.data.dao.IFlightDao;
+import com.rumbo.favs.data.dao.IInfantPricesDao;
 import com.rumbo.favs.data.dao.ServiceFactory;
 import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
@@ -20,17 +27,34 @@ import com.rumbo.favs.data.utilities.ManageProperties;
 public class SearchEngineImpl implements ISearchEngine{
 	
 	private ManageProperties manageProperties = new ManageProperties();
+	
+	private IAirportDao airportDao = ServiceFactory.getAirportDaoFactory();
+	
+	private IFlightDao flightDao = ServiceFactory.getFlightDaoFactory();
+	/*
+	private IApplicationConfigurationByPassengerTypeDao appliConfigDao = ServiceFactory.getApplicationConfigurationByPassengerTypeDaoFactory();
+	
+	private IDaysToDepartureDateDao daysToDepartureDao = ServiceFactory.getDaysToDepartureDateDaoFactory();
+	
+	private IDiscountByPassengerTypeDao discountByPassengerDao = ServiceFactory.getDiscountByPassengerTypeDaoFactory();
+	
+	private IInfantPricesDao infantPricesDao = ServiceFactory.getInfantPricesDaoFactory();
+	
+*/
+	
+	private Node nodeFlight = null;
 
+	public SearchEngineImpl(){
+	}
+	
 	public AvailabilityResult search(String origin, String destination, int daysToDeparture, int numAdult, int numChild, int numInfant) throws SearchCriteriaException{
 		
 		try{
-			SearchCriteria searchCriteria = new SearchCriteria(origin, destination, daysToDeparture, numAdult, numChild, numInfant);
+			SearchCriteria searchCriteria = new SearchCriteria(origin, destination, daysToDeparture, numAdult, numChild, numInfant, airportDao);
 			
 			{
-				IFlightDao iFlightDao = ServiceFactory.getFlightDaoFactory();
 				// Search if exist flight combination
-				FlightGroup flights = iFlightDao.
-						getFlightsByItinerary(searchCriteria.getDepartureCity(), searchCriteria.getArrivalCity());
+				FlightGroup flights = flightDao.getFlightsByItinerary(searchCriteria.getDepartureCity(), searchCriteria.getArrivalCity());
 				
 				// Exist flight combination
 				if (flights != null && flights.getFlightGroup().size() > 0){
@@ -62,5 +86,15 @@ public class SearchEngineImpl implements ISearchEngine{
 		
 		return availabilityResult;
 	}
+
+	public Node getNodeFlight() {
+		return nodeFlight;
+	}
+
+	public void setNodeFlight(Node nodeFlight) {
+		this.nodeFlight = nodeFlight;
+	}
+	
+	
 	
 }

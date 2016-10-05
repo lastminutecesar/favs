@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
 import com.rumbo.favs.data.dao.IAirportDao;
+import com.rumbo.favs.data.dao.IFlightDao;
 import com.rumbo.favs.data.dao.ServiceFactory;
 import com.rumbo.favs.data.entities.Airport;
 
@@ -18,16 +19,18 @@ public class SearchCriteria {
 	private String arrivalCity = null;
 	private int daysToDeparture = 0;
 	private Map<PassengerType,Integer> passengers = new TreeMap<PassengerType, Integer>();
-	
-	private final IAirportDao airportDao = 
-			ServiceFactory.getAirportDaoFactory();
+	IAirportDao airportDao = null;
 	
 	public SearchCriteria() {
 		super();
 	}
 
-	public SearchCriteria(String departureCity, String arrivalCity, int daysToDeparture, int numAdult, int numChild, int numInfant) throws SearchCriteriaException{
+	public SearchCriteria(String departureCity, String arrivalCity, int daysToDeparture, int numAdult, int numChild, int numInfant, IAirportDao airportDao) throws SearchCriteriaException{
 		super();
+		
+		if (airportDao != null){
+			this.airportDao = airportDao;
+		}
 		
 		String messageType = validate(departureCity, arrivalCity, daysToDeparture, numAdult, numChild, numInfant);
 		if (!messageType.isEmpty()){
@@ -40,6 +43,7 @@ public class SearchCriteria {
 		this.passengers.put(PassengerType.ADT, numAdult);
 		this.passengers.put(PassengerType.CHD, numChild);
 		this.passengers.put(PassengerType.INF, numInfant);
+
 	}
 	
 	public String validate(String departureCity, String arrivalCity, int daysToDeparture, int numAdult, int numChild, int numInfant){

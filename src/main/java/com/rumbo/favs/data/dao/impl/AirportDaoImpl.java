@@ -1,27 +1,27 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;
+import com.rumbo.favs.data.entities.AirportGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
-import com.rumbo.favs.data.utilities.ReadCsv;
 
 /**
  * Infant Price DAO
@@ -29,6 +29,87 @@ import com.rumbo.favs.data.utilities.ReadCsv;
  */
 public class AirportDaoImpl implements IAirportDao{
 
+	private Node nodeAirport = null;
+	
+	private final String AIRPORTSFILE = "airportsFile";
+	
+	private final String CSVEXTENSION = ".csv";
+	
+	public AirportDaoImpl(){
+		loadFile();
+	}
+	
+	/**
+	 * Write xml files from csv files
+	 * 
+	 * Get all files from files.Properties
+	 * 
+	 */
+	private void loadFile(){
+		
+		ManageProperties manageProperties = new ManageProperties();
+		
+		String csvFileResourceFolder = manageProperties.getConfigProperty(ManageProperties.CSV_FILE_RESOURCE_FOLDER);
+		
+		if (csvFileResourceFolder != null && !csvFileResourceFolder.isEmpty()){						
+			
+			String airportFile = manageProperties.getFilesProperty(AIRPORTSFILE);			
+			if (airportFile != null && !airportFile.isEmpty()){
+				csvToXmlAirport(csvFileResourceFolder + airportFile + CSVEXTENSION);
+			}
+		}		
+	}	
+	
+	private void csvToXmlAirport(String csvFile) {
+		
+		if (csvFile != null && !csvFile.isEmpty()){
+			
+			BufferedReader br = null;
+			String line = "";
+			String splitBy = ",";
+			AirportGroup airportGroup = new AirportGroup();
+
+			// Read csv file
+			try {				
+				br = new BufferedReader(new FileReader(csvFile));
+				while ((line = br.readLine()) != null) {
+					String[] csvAirport = line.split(splitBy);
+					Airport airport = new Airport(csvAirport[0],csvAirport[1]);
+					airportGroup.getAirportGroup().add(airport);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			// Write xml file with JAXB
+			try {	
+				JAXBContext jaxbContext = JAXBContext.newInstance(AirportGroup.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+				
+				DOMResult res = new DOMResult();
+				jaxbMarshaller.marshal(airportGroup, res);
+				
+				if (res != null){
+					setNodeAirport(res.getNode());
+				}				
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Get infant price by airline
 	 * 
@@ -36,32 +117,14 @@ public class AirportDaoImpl implements IAirportDao{
 	 */
 	public Airport getAirportByIataCode(String iataCode) {
 		
-		Airport airport = new Airport();
-		
-		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		Document document = null;
-				
-		try {
-			ManageProperties manageProperties = new ManageProperties();
-			
-			String xmlAirportsFile = manageProperties.getFilesProperty(ReadCsv.AIRPORTSFILE);
-			String fileResourceFolder = manageProperties.getConfigProperty(ManageProperties.XML_FILE_RESOURCE_FOLDER);
-			
-			if (fileResourceFolder != null && !fileResourceFolder.isEmpty() &&
-					xmlAirportsFile != null && !xmlAirportsFile.isEmpty()){
-			
-			    builder = builderFactory.newDocumentBuilder();
-			    
-				// First time I create xml file, if I try to get it 
-				// through ClassLoader, don't get it, so I do this
-			    document = builder.parse(new FileInputStream(fileResourceFolder + xmlAirportsFile + ReadCsv.XMLEXTENSION));
+		try {			
+			if (getNodeAirport() != null){
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
 			    //Query
 				String expression = "/airportGroup/airport[" + IAirportDao.IATACODE + "='"+ iataCode + "']";		    
-				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
+				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeAirport(), XPathConstants.NODESET);
 				
 				//None result
 				if (nodeList.getLength() == 0){
@@ -74,21 +137,13 @@ public class AirportDaoImpl implements IAirportDao{
 		           return getAirport(element);
 		        }
 			}            
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();			
-		} catch (ParserConfigurationException e) {
-		    e.printStackTrace();  
-		} catch (SAXException e) {
-		    e.printStackTrace();
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return airport;
+		return null;
 	}
 	
 	/**
@@ -107,4 +162,13 @@ public class AirportDaoImpl implements IAirportDao{
 		
 		return airport;
 	}
+
+	public Node getNodeAirport() {
+		return nodeAirport;
+	}
+
+	public void setNodeAirport(Node nodeAirport) {
+		this.nodeAirport = nodeAirport;
+	}	
+		
 }
