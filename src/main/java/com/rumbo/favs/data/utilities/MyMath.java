@@ -21,7 +21,7 @@ public class MyMath {
 			DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
 
 		    dfs.setDecimalSeparator(',');
-		    dfs.setGroupingSeparator(' ');
+		    dfs.setGroupingSeparator('.');
 		    
 		    df.setDecimalFormatSymbols(dfs);
 		    
