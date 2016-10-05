@@ -7,7 +7,7 @@ public class MyMath {
 	public static String getRoundedFloat(float number){
 			
 			String aux;
-			String separator = ",";
+			String separator = ".";
 			String pattern = "00";
 			
 			DecimalFormat df = new DecimalFormat();
