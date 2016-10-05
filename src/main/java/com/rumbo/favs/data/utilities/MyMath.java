@@ -12,8 +12,9 @@ public class MyMath {
 		
 		if (number > 0){			
 
-			String separator = ",";
+			String separator = ".";
 			String pattern = "00";
+			String patternBis = "0";
 			
 			DecimalFormat df = new DecimalFormat();
 			
@@ -25,7 +26,7 @@ public class MyMath {
 			String[] parts = aux.split(separator);
 			
 			if (parts.length > 0){
-				if (pattern.equals(parts[1])){
+				if (pattern.equals(parts[1]) || patternBis.equals(parts[1])){
 					return parts[0];
 				}else{
 					return aux;
