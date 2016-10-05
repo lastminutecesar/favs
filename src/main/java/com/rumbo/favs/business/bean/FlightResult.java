@@ -10,7 +10,7 @@ import java.util.List;
 public class FlightResult {
 
 	String flight;
-	float totalAmount;	
+	float totalAmount = 0f;	
 	List<TravellerPrice> travellerPriceList;
 		
 	public FlightResult() {
