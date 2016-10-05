@@ -55,7 +55,7 @@ public class AvailabilityResult {
 		String newLine = "\n";
 		String comma = ",";
 		String space = " ";
-		String euro = "€ ";
+		String euro = " EUR ";
 		
 		if (result.equals(ResultType.KO)){
 			return description;
