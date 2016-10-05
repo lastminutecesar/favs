@@ -52,3 +52,6 @@
 </dependencies>
 
 </project>
+<properties>
+    <java.version>1.7</java.version>
+</properties>
