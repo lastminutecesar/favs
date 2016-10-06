@@ -9,9 +9,6 @@
 	     <resource>
 			<directory>src/main/resources/files</directory>
 	     </resource>
-	     <resource>
-			<directory>src/main/resources/files/xml</directory>
-	     </resource>
    	     <resource>
 			<directory>src/main/resources/config</directory>
 			<filtering>true</filtering>

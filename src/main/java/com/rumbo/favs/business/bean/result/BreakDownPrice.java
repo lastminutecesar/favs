@@ -1,7 +1,12 @@
-package com.rumbo.favs.business.bean;
+package com.rumbo.favs.business.bean.result;
 
-import java.text.DecimalFormat;
-
+/**
+ * Breakdown price of a passenger type
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
+ */
 public class BreakDownPrice {
 
 	float basePrice;

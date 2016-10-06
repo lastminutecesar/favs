@@ -5,7 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Itinerary
+ * Days to departure date class 
+ * to work with jaxb and dom
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 @XmlRootElement(name = "daysToDepartureDate")
 @XmlAccessorType (XmlAccessType.FIELD)

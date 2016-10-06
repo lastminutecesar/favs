@@ -1,6 +1,6 @@
 package com.rumbo.favs.data.dao;
 
-import com.rumbo.favs.business.bean.ApplicationConfigurationType;
+import com.rumbo.favs.business.enums.configuration.ApplicationConfigurationType;
 import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerType;
 
 public interface IApplicationConfigurationByPassengerTypeDao {

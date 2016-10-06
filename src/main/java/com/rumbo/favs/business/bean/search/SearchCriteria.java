@@ -1,9 +1,10 @@
-package com.rumbo.favs.business.bean;
+package com.rumbo.favs.business.bean.search;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
+import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.dao.IFlightDao;
 import com.rumbo.favs.data.dao.ServiceFactory;
@@ -12,13 +13,20 @@ import com.rumbo.favs.data.entities.Airport;
 
 /**
  * Flight Search Criteria
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class SearchCriteria {
 
 	private String departureCity = null;
 	private String arrivalCity = null;
 	private int daysToDeparture = 0;
+	
+	// TreeMap to get an ordered map by key
 	private Map<PassengerType,Integer> passengers = new TreeMap<PassengerType, Integer>();
+	
 	IAirportDao airportDao = null;
 	
 	public SearchCriteria() {
@@ -30,22 +38,35 @@ public class SearchCriteria {
 		
 		if (airportDao != null){
 			this.airportDao = airportDao;
-		}
-		
-		String messageType = validate(departureCity, arrivalCity, daysToDeparture, numAdult, numChild, numInfant);
-		if (!messageType.isEmpty()){
-			throw new SearchCriteriaException(messageType);
-		}
-		
-		this.departureCity = departureCity;
-		this.arrivalCity = arrivalCity;
-		this.daysToDeparture = daysToDeparture;
-		this.passengers.put(PassengerType.ADT, numAdult);
-		this.passengers.put(PassengerType.CHD, numChild);
-		this.passengers.put(PassengerType.INF, numInfant);
+			
+			String messageType = validate(departureCity, arrivalCity, daysToDeparture, numAdult, numChild, numInfant);
+			if (!messageType.isEmpty()){
+				throw new SearchCriteriaException(messageType);
+			}
+			
+			this.departureCity = departureCity;
+			this.arrivalCity = arrivalCity;
+			this.daysToDeparture = daysToDeparture;
+			this.passengers.put(PassengerType.ADT, numAdult);
+			this.passengers.put(PassengerType.CHD, numChild);
+			this.passengers.put(PassengerType.INF, numInfant);
+		}else{
+			throw new SearchCriteriaException(SearchCriteriaException.ERROR_BBDD_CONNECTION);
+		}		
 
 	}
 	
+	/**
+	 * Validate input params
+	 * 
+	 * @param departureCity
+	 * @param arrivalCity
+	 * @param daysToDeparture
+	 * @param numAdult
+	 * @param numChild
+	 * @param numInfant
+	 * @return String with message exception
+	 */
 	public String validate(String departureCity, String arrivalCity, int daysToDeparture, int numAdult, int numChild, int numInfant){
 		
 		if (!existsCity(departureCity)){
@@ -68,12 +89,21 @@ public class SearchCriteria {
 		return "";		
 	}	
 	
+	/**
+	 * If exists city in bbdd
+	 * 
+	 * @param city
+	 * @return if city is allowed
+	 */
 	private boolean existsCity(String city){
 		
-		Airport airport = airportDao.getAirportByIataCode(city);
-		
-		if (airport != null && airport.getIataCode() != null && !airport.getIataCode().isEmpty()){
-			return true;
+		if (city != null && !city.isEmpty()){
+			
+			Airport airport = airportDao.getAirportByIataCode(city);
+			
+			if (airport != null && airport.getIataCode() != null && !airport.getIataCode().isEmpty()){
+				return true;
+			}
 		}
 		
 		return false;

@@ -1,10 +1,14 @@
-package com.rumbo.favs.business.services;
+package com.rumbo.favs.business.services.core;
 
-import com.rumbo.favs.business.bean.AvailabilityResult;
-import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
+import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
+import com.rumbo.favs.business.bean.result.AvailabilityResult;
 
 /**
  * Main business interface
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public interface ISearchEngine {
 

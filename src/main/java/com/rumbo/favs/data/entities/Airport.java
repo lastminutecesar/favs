@@ -5,7 +5,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Airport
+ * Airport class to work with jaxb and dom
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 @XmlRootElement(name = "airport")
 @XmlAccessorType (XmlAccessType.FIELD)

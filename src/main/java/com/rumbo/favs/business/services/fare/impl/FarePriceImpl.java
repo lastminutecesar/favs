@@ -1,23 +1,20 @@
-package com.rumbo.favs.business.services.impl;
+package com.rumbo.favs.business.services.fare.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.omg.PortableInterceptor.ACTIVE;
-
-import com.rumbo.favs.business.bean.ApplicationConfigurationType;
-import com.rumbo.favs.business.bean.BreakDownPrice;
-import com.rumbo.favs.business.bean.FlightResult;
 import com.rumbo.favs.business.bean.PassengerType;
-import com.rumbo.favs.business.bean.SearchCriteria;
-import com.rumbo.favs.business.bean.TravellerPrice;
-import com.rumbo.favs.business.services.IFarePrice;
+import com.rumbo.favs.business.bean.result.BreakDownPrice;
+import com.rumbo.favs.business.bean.result.FlightResult;
+import com.rumbo.favs.business.bean.result.TravellerPrice;
+import com.rumbo.favs.business.bean.search.SearchCriteria;
+import com.rumbo.favs.business.enums.configuration.ApplicationConfigurationType;
+import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
 import com.rumbo.favs.data.dao.IDaysToDepartureDateDao;
 import com.rumbo.favs.data.dao.IDiscountByPassengerTypeDao;
 import com.rumbo.favs.data.dao.IInfantPricesDao;
-import com.rumbo.favs.data.dao.ServiceFactory;
 import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerType;
 import com.rumbo.favs.data.entities.DaysToDepartureDate;
 import com.rumbo.favs.data.entities.DiscountByPassengerType;
@@ -26,32 +23,43 @@ import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.entities.InfantPrice;
 
 /**
- * Calculate fare price
+ * Main fare interface
  * 
+ * Get fare price from search criteria
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class FarePriceImpl implements IFarePrice{
 	
 	//DAOS to use
 	
-	private final IApplicationConfigurationByPassengerTypeDao applicationConfigurationByPassengerTypeDao = 
-			ServiceFactory.getApplicationConfigurationByPassengerTypeDaoFactory();
+	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
 	
-	private final IDiscountByPassengerTypeDao discountByPassengerTypeDao = 
-			ServiceFactory.getDiscountByPassengerTypeDaoFactory();
+	private IDiscountByPassengerTypeDao discountByPassengerTypeDao;
 	
-	private final IDaysToDepartureDateDao daysToDepartureDateDao = 
-			ServiceFactory.getDaysToDepartureDateDaoFactory();
+	private IDaysToDepartureDateDao daysToDepartureDateDao;
 	
-	private final IInfantPricesDao infantPricesDao = 
-			ServiceFactory.getInfantPricesDaoFactory();
-	
+	private IInfantPricesDao infantPricesDao;	
 
 	private String active = "1";
 	
 	public FarePriceImpl(){
-		
+		super();
 	}
 	
+	public FarePriceImpl(IApplicationConfigurationByPassengerTypeDao appliConfigDao,
+							IDaysToDepartureDateDao daysToDepartureDateDao,
+							IDiscountByPassengerTypeDao discountByPassengerTypeDao,
+							IInfantPricesDao infantPricesDao){
+		super();
+		this.appliConfigDao = appliConfigDao;
+		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
+		this.daysToDepartureDateDao = daysToDepartureDateDao;
+		this.infantPricesDao = infantPricesDao;
+	}
+
 	/**
 	 * Return price's breakdown
 	 * 
@@ -72,6 +80,13 @@ public class FarePriceImpl implements IFarePrice{
 		return flightResultList;
 	}
 	
+	/**
+	 * Calculate fare result by fight from search criteria
+	 * 
+	 * @param searchCriteria
+	 * @param flight
+	 * @return FlightResult
+	 */
 	private FlightResult getFlightResult(SearchCriteria searchCriteria, Flight flight){
 		
 		String flightNumber = flight.getAirline();
@@ -88,7 +103,12 @@ public class FarePriceImpl implements IFarePrice{
 		return new FlightResult(flightNumber, totalAmount, travellerPriceList);		
 	}
 	
-	
+	/**
+	 * Calculate fare amount by flight
+	 * 
+	 * @param travellerPriceList
+	 * @return
+	 */
 	private float getTotalAmountByFlight(List<TravellerPrice> travellerPriceList){
 			
 		float totalAmount = 0f;
@@ -130,7 +150,7 @@ public class FarePriceImpl implements IFarePrice{
 				// Get a base price type from application configuration for a passenger type
 				// I am trying a generic solution			
 				ApplicationConfigurationByPassengerType applicationConfigurationByPassengerType = 
-						applicationConfigurationByPassengerTypeDao.getApplicationConfigurationByName(ApplicationConfigurationType.INFANTBASEPRICE);
+						appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.INFANTBASEPRICE);
 				// If apply a reduce fare set base price new value
 				// else airline fare is ok
 				if (applicationConfigurationByPassengerType != null){
@@ -156,6 +176,11 @@ public class FarePriceImpl implements IFarePrice{
 		return travellerPriceList;		
 	}
 	
+	/**
+	 * Set fare amount by all passengers type in a flight
+	 * 
+	 * @param travellerPriceList
+	 */
 	private void setTotalAmountByPassengerType(List<TravellerPrice> travellerPriceList){
 				
 		for (TravellerPrice travellerPrice: travellerPriceList){
@@ -163,16 +188,25 @@ public class FarePriceImpl implements IFarePrice{
 		}
 	}
 	
+	/**
+	 * Calculate amount by fare passenger type
+	 * 
+	 * @param travellerPrice
+	 */
 	private void getTravellerPriceAmount(TravellerPrice travellerPrice){
 		
 		if (travellerPrice != null && travellerPrice.getNumber() > 0){
 			
 			float amount = 0;
+			
+			//If has date departure discount
 			if(travellerPrice.getBreakDownPrice().getDateDiscount() > 0){
 				amount = (float) (travellerPrice.getBreakDownPrice().getDateDiscount() * travellerPrice.getBreakDownPrice().getBasePrice()) / 100;
 			}else{
 				amount = travellerPrice.getBreakDownPrice().getBasePrice();
 			}
+			
+			//If has passenger discount
 			if (travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
 				amount =  (float) ((100 - travellerPrice.getBreakDownPrice().getPassengerDiscount()) * amount) / 100;
 			}
@@ -194,7 +228,8 @@ public class FarePriceImpl implements IFarePrice{
 		
 		// Days to departure date discount
 		ApplicationConfigurationByPassengerType applicationConfigurationByPassengerType = 
-				applicationConfigurationByPassengerTypeDao.getApplicationConfigurationByName(ApplicationConfigurationType.DAYSTODEPARTUREDATE);		
+				appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.DAYSTODEPARTUREDATE);	
+		
 		//Active discount && apply discount for this passenger type
 		if (applicationConfigurationByPassengerType != null){
 			if (active.equals(applicationConfigurationByPassengerType.getStatus()) &&
@@ -211,7 +246,8 @@ public class FarePriceImpl implements IFarePrice{
 		
 		// Discount by passenger type
 		applicationConfigurationByPassengerType = 
-				applicationConfigurationByPassengerTypeDao.getApplicationConfigurationByName(ApplicationConfigurationType.DISCOUNTBYPASSENERTYPE);		
+				appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.DISCOUNTBYPASSENERTYPE);		
+		
 		//Active discount && apply discount for this passenger type
 		if (applicationConfigurationByPassengerType != null){
 			if (active.equals(applicationConfigurationByPassengerType.getStatus()) &&

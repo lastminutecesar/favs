@@ -9,8 +9,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Class to allow work with object list and marshal
+ * Groups infant Price by Airline xmls tags 
+ * to work with jaxb and dom
  * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 @XmlRootElement(name = "infantPriceGroup")
 @XmlAccessorType (XmlAccessType.FIELD)

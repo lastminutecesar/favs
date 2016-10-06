@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.rumbo.favs.business.bean.ApplicationConfigurationType;
+import com.rumbo.favs.business.enums.configuration.ApplicationConfigurationType;
 import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
 import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerType;
 import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerTypeGroup;

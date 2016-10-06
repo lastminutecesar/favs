@@ -10,12 +10,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.rumbo.favs.business.bean.AvailabilityResult;
-import com.rumbo.favs.business.bean.FlightResult;
-import com.rumbo.favs.business.bean.ResultType;
-import com.rumbo.favs.business.bean.exceptions.SearchCriteriaException;
-import com.rumbo.favs.business.services.ISearchEngine;
-import com.rumbo.favs.business.services.impl.SearchEngineImpl;
+import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
+import com.rumbo.favs.business.bean.result.AvailabilityResult;
+import com.rumbo.favs.business.bean.result.FlightResult;
+import com.rumbo.favs.business.enums.result.ResultType;
+import com.rumbo.favs.business.services.core.ISearchEngine;
+import com.rumbo.favs.business.services.core.impl.SearchEngineImpl;
 import com.rumbo.favs.data.utilities.MyMath;
 
 public class SearchTest {

@@ -5,7 +5,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Infant Price by Airline
+ * Infant Price by Airline class to work with jaxb and dom
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 @XmlRootElement(name = "infantPrice")
 @XmlAccessorType (XmlAccessType.FIELD)

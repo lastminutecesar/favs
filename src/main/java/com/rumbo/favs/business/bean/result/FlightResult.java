@@ -1,4 +1,4 @@
-package com.rumbo.favs.business.bean;
+package com.rumbo.favs.business.bean.result;
 
 import java.util.List;
 
@@ -6,6 +6,10 @@ import java.util.List;
  * Flight result
  * 
  * Flight and price breakdown list
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class FlightResult {
 

@@ -1,7 +1,13 @@
-package com.rumbo.favs.business.bean;
+package com.rumbo.favs.business.bean.result;
+
+import com.rumbo.favs.business.bean.PassengerType;
 
 /**
- * Search result
+ * Price info of a passenger type
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class TravellerPrice{
 

@@ -7,9 +7,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.rumbo.favs.business.bean.PassengerType;
 
 /**
- * Application configuration
- * by passenger type
+ * Application configuration by passenger type
+ * to work with jaxb and dom
  * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 @XmlRootElement(name = "applicationConfigurationByPassengerType")
 @XmlAccessorType (XmlAccessType.FIELD)
