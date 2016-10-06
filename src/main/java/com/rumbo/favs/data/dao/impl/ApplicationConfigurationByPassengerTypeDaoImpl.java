@@ -25,8 +25,16 @@ import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerTypeGroup
 import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
- * Infant Price DAO
+ * ApplicationConfigurationByPassengerType DAO
+ * Manage discounts allowed by passenger type
  * 
+ * This implimentation works with csv files
+ * and turn the information into dom object
+ * to let launch queries
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicationConfigurationByPassengerTypeDao{	
 	
@@ -41,9 +49,8 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 	}
 	
 	/**
-	 * Write xml files from csv files
-	 * 
-	 * Get all files from files.Properties
+	 * Get csv file name from properties file
+	 * and turn the information into dom object
 	 * 
 	 */
 	private void loadFile(){
@@ -60,6 +67,11 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 		}		
 	}	
 	
+	/**
+	 * From csvFile turn the information into dom object
+	 * 
+	 * @param csvFile
+	 */
 	private void csvToXmlApplicationConfigurationByPassengerType(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty()){
@@ -95,7 +107,7 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 				}
 			}
 			
-			// Write xml file with JAXB
+			// Get dom object through JAXB
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(ApplicationConfigurationByPassengerTypeGroup.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -114,9 +126,11 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 	
 
 	/**
-	 * Get infant price by airline
+	 * Get ApplicationConfigurationByPassengerType by 
+	 * an applicationConfigurationType property
 	 * 
-	 * @return InfantPrice
+	 * @param ApplicationConfigurationType property
+	 * @return ApplicationConfigurationByPassengerType
 	 */
 	public ApplicationConfigurationByPassengerType getApplicationConfigurationByName(ApplicationConfigurationType property) {
 		
@@ -125,15 +139,16 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
-			    //Query
+			    // Query
 				String expression = "/applicationConfigurationByPassengerTypeGroup/applicationConfigurationByPassengerType[" + IApplicationConfigurationByPassengerTypeDao.NAME + "='"+ property + "']";		    
 				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeApplicationConfigurationByPassengerType(), XPathConstants.NODESET);
 				
-				//None result
+				// None result
 				if (nodeList.getLength() == 0){
 					return null;
 				}
-							
+				
+				// Get business object from dom (query result)
 	            Node nNode = nodeList.item(0);
 	            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 	               Element element = (Element) nNode;
@@ -150,9 +165,11 @@ public class ApplicationConfigurationByPassengerTypeDaoImpl implements IApplicat
 	}
 	
 	/**
-	 * Get application configuration from xml element
+	 * Get ApplicationConfigurationByPassengerType
+	 * from dom object
 	 * 
-	 * @return InfantPrice
+	 * @param element 
+	 * @return ApplicationConfigurationByPassengerType
 	 */
 	private ApplicationConfigurationByPassengerType getApplicationConfiguration(Element element){
 		

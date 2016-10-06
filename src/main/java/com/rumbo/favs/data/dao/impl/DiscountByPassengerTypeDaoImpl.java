@@ -25,8 +25,16 @@ import com.rumbo.favs.data.entities.DiscountByPassengerTypeGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
- * Infant Price DAO
+ * DiscountByPassengerType DAO
+ * Manage discount by passenger type
  * 
+ * This implimentation works with csv files
+ * and turn the information into dom object
+ * to let launch queries
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeDao{
 	
@@ -41,9 +49,8 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 	}
 	
 	/**
-	 * Write xml files from csv files
-	 * 
-	 * Get all files from files.Properties
+	 * Get csv file name from properties file
+	 * and turn the information into dom object
 	 * 
 	 */
 	private void loadFile(){
@@ -60,6 +67,11 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 		}		
 	}	
 	
+	/**
+	 * From csvFile turn the information into dom object
+	 * 
+	 * @param csvFile
+	 */
 	private void csvToXmlDiscountByPassengerType(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty() ){
@@ -94,7 +106,7 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 				}
 			}
 			
-			// Write xml file with JAXB
+			// Get dom object through JAXB
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(DiscountByPassengerTypeGroup.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -112,9 +124,10 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 	}
 
 	/**
-	 * Get infant price by airline
+	 * Get discount passenger type by a passenger type
 	 * 
-	 * @return InfantPrice
+	 * @param PassengerType passengerType
+	 * @return DiscountByPassengerType
 	 */
 	public DiscountByPassengerType getDiscountPercent(PassengerType passengerType) {
 		
@@ -123,15 +136,16 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
-			    //Query
+			    // Query
 				String expression = "/discountByPassengerTypeGroup/discountByPassengerType[" + IDiscountByPassengerTypeDao.PASSENGERTYPE + "='"+ passengerType.toString() + "']";		    
 				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeDiscountByPassengerType(), XPathConstants.NODESET);
 				
-				//None result
+				// None result
 				if (nodeList.getLength() == 0){
 					return null;
 				}
-							
+					
+				// Get business object from dom (query result)
 	            Node nNode = nodeList.item(0);
 	            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 	               Element element = (Element) nNode;
@@ -148,9 +162,10 @@ public class DiscountByPassengerTypeDaoImpl implements IDiscountByPassengerTypeD
 	}
 	
 	/**
-	 * Get infantPrice from xml element
+	 * Get discount by passenger type from dom object
 	 * 
-	 * @return InfantPrice
+	 * @param element 
+	 * @return DiscountByPassengerType
 	 */
 	private DiscountByPassengerType getDiscountByPassengerType(Element element){
 		

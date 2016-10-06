@@ -13,8 +13,16 @@ import com.rumbo.favs.business.bean.result.AvailabilityResult;
 public interface ISearchEngine {
 
 	/**
-	 * @return the search result
-	 * */
+	 * 
+	 * @param origin
+	 * @param destination
+	 * @param daysToDeparture
+	 * @param numAdult
+	 * @param numChild
+	 * @param numInfant
+	 * @return search result
+	 * @throws SearchCriteriaException
+	 */
 	public AvailabilityResult search(String origin, String destination, int daysToDeparture, int numAdult, int numChild, int numInfant)  throws SearchCriteriaException;
 	
 }

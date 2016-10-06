@@ -24,8 +24,12 @@ import com.rumbo.favs.data.entities.InfantPriceGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
- * Infant Price DAO
+ * Infant prices DAO
+ * Manage infant prices
  * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class InfantPriceDaoImpl implements IInfantPricesDao{
 	
@@ -40,9 +44,8 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 	}
 	
 	/**
-	 * Write xml files from csv files
-	 * 
-	 * Get all files from files.Properties
+	 * Get csv file name from properties file
+	 * and turn the information into dom object
 	 * 
 	 */
 	private void loadFile(){
@@ -59,6 +62,11 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 		}		
 	}	
 	
+	/**
+	 * From csvFile turn the information into dom object
+	 * 
+	 * @param csvFile
+	 */
 	private void csvToXmlInfantPrices(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty()){
@@ -92,7 +100,7 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 				}
 			}
 			
-			// Write xml file with JAXB
+			// Get dom object through JAXB
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(InfantPriceGroup.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -113,6 +121,7 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 	/**
 	 * Get infant price by airline
 	 * 
+	 * @param String airline
 	 * @return InfantPrice
 	 */
 	public InfantPrice getInfantPriceByAirline(String airline) {
@@ -122,15 +131,16 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
-			    //Query
+			    // Query
 				String expression = "/infantPriceGroup/infantPrice[" + IInfantPricesDao.IATACODE + "='"+ airline + "']";		    
 				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeInfantPrice(), XPathConstants.NODESET);
 				
-				//None result
+				// None result
 				if (nodeList.getLength() == 0){
 					return null;
 				}
-							
+				
+				// Get business object from dom (query result)			
 		        Node nNode = nodeList.item(0);
 		        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		           Element element = (Element) nNode;
@@ -147,8 +157,9 @@ public class InfantPriceDaoImpl implements IInfantPricesDao{
 	}
 	
 	/**
-	 * Get infantPrice from xml element
+	 * Get InfantPrice from dom object
 	 * 
+	 * @param element 
 	 * @return InfantPrice
 	 */
 	private InfantPrice getInfantPrice(Element element){

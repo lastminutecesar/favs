@@ -24,8 +24,16 @@ import com.rumbo.favs.data.entities.DaysToDepartureDateGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
- * Infant Price DAO
+ * DaysToDepartureDate DAO
+ * Manage days to departure date discount
  * 
+ * This implimentation works with csv files
+ * and turn the information into dom object
+ * to let launch queries
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	
@@ -38,11 +46,10 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	public DaysToDepartureDateDaoImpl(){
 		loadFile();
 	}
-
+	
 	/**
-	 * Write xml files from csv files
-	 * 
-	 * Get all files from files.Properties
+	 * Get csv file name from properties file
+	 * and turn the information into dom object
 	 * 
 	 */
 	private void loadFile(){
@@ -59,6 +66,11 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 		}		
 	}	
 	
+	/**
+	 * From csvFile turn the information into dom object
+	 * 
+	 * @param csvFile
+	 */
 	private void csvToXmlDaysToDepartureDate(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty()){
@@ -93,7 +105,7 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 				}
 			}
 			
-			// Write xml file with JAXB
+			// Get dom object through JAXB
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(DaysToDepartureDateGroup.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -111,9 +123,11 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	}
 	
 	/**
-	 * Get infant price by airline
+	 * Get days to departure date 
+	 * by a given day
 	 * 
-	 * @return InfantPrice
+	 * @param int days
+	 * @return DaysToDepartureDate
 	 */
 	public DaysToDepartureDate getDiscountPercent(int days) {
 		
@@ -122,15 +136,16 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 			    
 			    XPath xPath =  XPathFactory.newInstance().newXPath();
 				
-			    //Query
+			    // Query
 				String expression = "/daysToDepartureDateGroup/daysToDepartureDate[" + IDaysToDepartureDateDao.MIN + "<=" + days + " and " + IDaysToDepartureDateDao.MAX + ">=" + days + "]";	
 				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeDaysToDepartureDate(), XPathConstants.NODESET);
 				
-				//None result
+				// None result
 				if (nodeList.getLength() == 0){
 					return null;
 				}
-							
+				
+				// Get business object from dom (query result)
 	            Node nNode = nodeList.item(0);
 	            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 	               Element element = (Element) nNode;
@@ -147,9 +162,10 @@ public class DaysToDepartureDateDaoImpl implements IDaysToDepartureDateDao{
 	}
 	
 	/**
-	 * Get infantPrice from xml element
+	 * Get DaysToDepartureDate from dom object
 	 * 
-	 * @return InfantPrice
+	 * @param element 
+	 * @return DaysToDepartureDate
 	 */
 	private DaysToDepartureDate getDaysToDepartureDate(Element element){
 		

@@ -25,8 +25,16 @@ import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
- * Flights (Itinerary) DAO
+ * Flight DAO 
+ * Manage flights
  * 
+ * This implimentation works with csv files
+ * and turn the information into dom object
+ * to let launch queries
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
  */
 public class FlightDaoImpl implements IFlightDao {
 		
@@ -41,7 +49,8 @@ public class FlightDaoImpl implements IFlightDao {
 	}
 	
 	/**
-	 * Write xml files from csv files
+	 * Get csv file name from properties file
+	 * and turn the information into dom object
 	 * 
 	 */
 	private void loadFile(){
@@ -59,6 +68,11 @@ public class FlightDaoImpl implements IFlightDao {
 		}		
 	}	
 	
+	/**
+	 * From csvFile turn the information into dom object
+	 * 
+	 * @param csvFile
+	 */
 	private void csvToXmlFlight(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty()){
@@ -92,7 +106,7 @@ public class FlightDaoImpl implements IFlightDao {
 				}
 			}
 			
-			// Write xml file with JAXB
+			// Get dom object through JAXB
 			try {
 				JAXBContext jaxbContext = JAXBContext.newInstance(FlightGroup.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -110,9 +124,11 @@ public class FlightDaoImpl implements IFlightDao {
 	}
 
 	/**
-	 * Get available flights from origin and destination
+	 * Get FlightGroup by origin and destination
 	 * 
-	 * @return Flights
+	 * @param String origin
+	 * @param String destination
+	 * @return FlightGroup
 	 */
 	public FlightGroup getFlightsByItinerary(String origin, String destination) {
 		
@@ -132,7 +148,7 @@ public class FlightDaoImpl implements IFlightDao {
 					return null;
 				}
 				
-				//Iterate query result
+				// Iterate query result
 				for (int i = 0; i < nodeList.getLength(); i++) {
 		            Node nNode = nodeList.item(i);
 		            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -154,9 +170,10 @@ public class FlightDaoImpl implements IFlightDao {
 	}
 	
 	/**
-	 * Get flight from xml element
+	 * Get flight from dom object
 	 * 
-	 * @return Flights
+	 * @param element 
+	 * @return Flight
 	 */
 	private Flight getFlight(Element element){
 		

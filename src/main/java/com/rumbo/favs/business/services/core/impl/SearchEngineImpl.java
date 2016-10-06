@@ -31,25 +31,37 @@ import com.rumbo.favs.data.utilities.ManageProperties;
  */
 public class SearchEngineImpl implements ISearchEngine{
 	
-	//Instance daos for business
-	
 	private ManageProperties manageProperties = new ManageProperties();
 	
-	private IAirportDao airportDao = ServiceFactory.getAirportDaoFactory();
+	private IAirportDao airportDao;
 	
-	private IFlightDao flightDao = ServiceFactory.getFlightDaoFactory();
+	private IFlightDao flightDao;
 	
-	private IApplicationConfigurationByPassengerTypeDao appliConfigDao = ServiceFactory.getApplicationConfigurationByPassengerTypeDaoFactory();
+	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
 	
-	private IDaysToDepartureDateDao daysToDepartureDao = ServiceFactory.getDaysToDepartureDateDaoFactory();
+	private IDaysToDepartureDateDao daysToDepartureDao;
 	
-	private IDiscountByPassengerTypeDao discountByPassengerDao = ServiceFactory.getDiscountByPassengerTypeDaoFactory();
+	private IDiscountByPassengerTypeDao discountByPassengerDao;
 	
-	private IInfantPricesDao infantPricesDao = ServiceFactory.getInfantPricesDaoFactory();
+	private IInfantPricesDao infantPricesDao;
 		
 	private Node nodeFlight = null;
 
 	public SearchEngineImpl(){
+		
+		//Instance daos for business only once
+		
+		airportDao = ServiceFactory.getAirportDaoFactory();
+		
+		flightDao = ServiceFactory.getFlightDaoFactory();
+		
+		appliConfigDao = ServiceFactory.getApplicationConfigurationByPassengerTypeDaoFactory();
+		
+		daysToDepartureDao = ServiceFactory.getDaysToDepartureDateDaoFactory();
+		
+		discountByPassengerDao = ServiceFactory.getDiscountByPassengerTypeDaoFactory();
+		
+		infantPricesDao = ServiceFactory.getInfantPricesDaoFactory();
 	}
 
 	/**
