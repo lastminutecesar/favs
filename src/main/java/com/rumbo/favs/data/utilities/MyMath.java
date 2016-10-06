@@ -3,8 +3,25 @@ package com.rumbo.favs.data.utilities;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+/**
+ * Auxiliar class to math functions
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
+ */
 public class MyMath {
 
+	/**
+	 * Get formatted string from float number
+	 * 
+	 * Established decimal separator: ","
+	 * Established thousands separator: "." 
+	 * Established two decimals
+	 * 
+	 * @param number
+	 * @return String
+	 */
 	public static String getRoundedFloat(float number){
 		String aux = "";
 		

@@ -6,9 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.AvailabilityResult;
@@ -18,6 +20,7 @@ import com.rumbo.favs.business.services.core.ISearchEngine;
 import com.rumbo.favs.business.services.core.impl.SearchEngineImpl;
 import com.rumbo.favs.data.utilities.MyMath;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SearchTest {
 	
 	private static ISearchEngine searchEngine;
@@ -64,9 +67,10 @@ public class SearchTest {
     public ExpectedException thrown = ExpectedException.none();	
 	
 	@Test		
-	public void test1() {
+	public void testA() {
 		System.out.println("TEST 1");
-		System.out.println("Capture exception: Departure city not available");
+		System.out.println("[1 adult, 1 child, 1 infant, 45 days to departure date, flying ALB -> MAD]");
+		System.out.println("Capture exception: Departure city not available" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DEPARTURE_CITY);
 	   
@@ -75,9 +79,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test2() {
+	public void testB() {
 		System.out.println("TEST 2");
-		System.out.println("Capture exception: Destination city not available");
+		System.out.println("[1 adult, 1 child, 1 infant, 45 days to departure date, flying MAD -> SVQ]");
+		System.out.println("Capture exception: Destination city not available" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DESTINATION_CITY);
 	   
@@ -86,9 +91,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test3() {
+	public void testC() {
 		System.out.println("TEST 3");
-		System.out.println("Capture exception: Negative departure days");
+		System.out.println("[1 adult, 1 child, 1 infant, -45 days to departure date, flying MAD -> BCN]");
+		System.out.println("Capture exception: Negative departure days" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DEPARTURE_DATE);
 	   
@@ -97,9 +103,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test4() {
+	public void testD() {
 		System.out.println("TEST 4");
-		System.out.println("Capture exception: Negative adult passengers");
+		System.out.println("[-1 adult, 1 child, 1 infant, 45 days to departure date, flying MAD -> BCN]");
+		System.out.println("Capture exception: Negative adult passengers" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -108,9 +115,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test5() {
+	public void testE() {
 		System.out.println("TEST 5");
-		System.out.println("Capture exception: Negative child passengers");
+		System.out.println("[1 adult, -1 child, 1 infant, 45 days to departure date, flying MAD -> BCN]");
+		System.out.println("Capture exception: Negative child passengers" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -119,9 +127,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test6() {
+	public void testF() {
 		System.out.println("TEST 6");
-		System.out.println("Capture exception: Negative infant passengers");
+		System.out.println("[1 adult, 1 child, -1 infant, 45 days to departure date, flying MAD -> BCN]");
+		System.out.println("Capture exception: Negative infant passengers" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -130,8 +139,9 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test7() {
+	public void testG() {
 		System.out.println("TEST 7");
+		System.out.println("[0 adult, 0 child, 0 infant, 45 days to departure date, flying MAD -> BCN]");
 		System.out.println("Capture exception: None passengers" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NONE_PASSENGERS);
@@ -141,18 +151,21 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test8() {
-		System.out.println("TEST 8");	   
+	public void testH() {
+		System.out.println("TEST 8");
+		System.out.println("[1 adult, 1 child, 1 infant, 45 days to departure date, flying CDG -> FRA]");
 		AvailabilityResult availabilityResult = searchEngine.search("CDG", "FRA", 45, 1, 1, 1);
 		assertNotNull(availabilityResult);
 		assertThat(availabilityResult.getResult(),is(ResultType.KO));
 		printResult(availabilityResult);
+		System.out.println();
 	}
 	
 	@Test		
-	public void test9() {
+	public void testI() {
 		try{
 			System.out.println("TEST 9");
+			System.out.println("[1 adult, 31 days to departure date, flying AMS -> FRA]");
 			AvailabilityResult availabilityResult = searchEngine.search("AMS", "FRA", 31, 1, 0, 0);		
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -165,9 +178,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test10() {
+	public void testJ() {
 		try{
 			System.out.println("TEST 10");
+			System.out.println("[2 adult, 1 child, 1 infant, 15 days to departure date, flying LHR -> IST]");
 			AvailabilityResult availabilityResult = searchEngine.search("LHR", "IST", 15, 2, 1, 1);		
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -180,9 +194,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test11() {
+	public void testK() {
 		try{
 			System.out.println("TEST 11");
+			System.out.println("[2 adult, 1 child, 2 infant, 2 days to departure date, flying BCN -> MAD]");
 			AvailabilityResult availabilityResult = searchEngine.search("BCN", "MAD", 2, 1, 2, 0);		
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -195,9 +210,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test12() {
+	public void testL() {
 		try{
 			System.out.println("TEST 12");
+			System.out.println("[1 adult, 0 days to departure date, flying CPH -> FCO]");
 			AvailabilityResult availabilityResult = searchEngine.search("CPH", "FCO", 0, 1, 0, 0);
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -210,9 +226,10 @@ public class SearchTest {
 	}	
 	
 	@Test		
-	public void test13() {
+	public void testM() {
 		try{
 			System.out.println("TEST 13");
+			System.out.println("[3 adult, 2 child, 2 infant, 17 days to departure date, flying CDG -> CPH]");
 			AvailabilityResult availabilityResult = searchEngine.search("CDG", "CPH", 17, 3, 2, 2);
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -225,9 +242,10 @@ public class SearchTest {
 	}
 	
 	@Test		
-	public void test14() {
+	public void testN() {
 		try{
 			System.out.println("TEST 14");
+			System.out.println("[1 adult, 1 child, 1 infant, 60 days to departure date, flying FRA -> LHR]");
 			AvailabilityResult availabilityResult = searchEngine.search("FRA", "LHR", 60, 1, 1, 1);
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -240,9 +258,10 @@ public class SearchTest {
 	}	
 	
 	@Test		
-	public void test15() {
+	public void testO() {
 		try{
 			System.out.println("TEST 15");
+			System.out.println("[2 adult, 2 child, 2 infant, 300 days to departure date, flying FCO -> AMS]");
 			AvailabilityResult availabilityResult = searchEngine.search("FCO", "AMS", 300, 2, 2, 2);
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));
@@ -255,9 +274,10 @@ public class SearchTest {
 	}	
 	
 	@Test		
-	public void test16() {
+	public void testP() {
 		try{
 			System.out.println("TEST 16");
+			System.out.println("[3 adult, 3 child, 3 infant, 20 days to departure date, flying MAD -> FRA]");
 			AvailabilityResult availabilityResult = searchEngine.search("MAD", "FRA", 20, 3, 3, 3);
 			assertNotNull(availabilityResult);
 			assertThat(availabilityResult.getResult(),is(ResultType.OK));

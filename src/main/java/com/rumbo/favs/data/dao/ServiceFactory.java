@@ -7,6 +7,13 @@ import com.rumbo.favs.data.dao.impl.DiscountByPassengerTypeDaoImpl;
 import com.rumbo.favs.data.dao.impl.FlightDaoImpl;
 import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
 
+/**
+ * Auxiliar class to math functions
+ * 
+ * @author  ccabrerizo
+ * @version 1.0
+ * @since   2016-10-07 
+ */
 public class ServiceFactory {
 
 	public static IFlightDao getFlightDaoFactory() {
