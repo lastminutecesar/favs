@@ -66,6 +66,7 @@ public class SearchTest {
 	@Test		
 	public void test1() {
 		System.out.println("TEST 1");
+		System.out.println("Capture exception: Departure city not available");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DEPARTURE_CITY);
 	   
@@ -76,6 +77,7 @@ public class SearchTest {
 	@Test		
 	public void test2() {
 		System.out.println("TEST 2");
+		System.out.println("Capture exception: Destination city not available");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DESTINATION_CITY);
 	   
@@ -86,6 +88,7 @@ public class SearchTest {
 	@Test		
 	public void test3() {
 		System.out.println("TEST 3");
+		System.out.println("Capture exception: Negative departure days");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_DEPARTURE_DATE);
 	   
@@ -96,6 +99,7 @@ public class SearchTest {
 	@Test		
 	public void test4() {
 		System.out.println("TEST 4");
+		System.out.println("Capture exception: Negative adult passengers");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -106,6 +110,7 @@ public class SearchTest {
 	@Test		
 	public void test5() {
 		System.out.println("TEST 5");
+		System.out.println("Capture exception: Negative child passengers");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -116,6 +121,7 @@ public class SearchTest {
 	@Test		
 	public void test6() {
 		System.out.println("TEST 6");
+		System.out.println("Capture exception: Negative infant passengers");
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NUM_PASSENGERS);
 	   
@@ -126,6 +132,7 @@ public class SearchTest {
 	@Test		
 	public void test7() {
 		System.out.println("TEST 7");
+		System.out.println("Capture exception: None passengers" + '\n');
 		thrown.expect(SearchCriteriaException.class);
 	    thrown.expectMessage(SearchCriteriaException.ERROR_NONE_PASSENGERS);
 	   
@@ -231,6 +238,36 @@ public class SearchTest {
 			e.printStackTrace();
 		}
 	}	
+	
+	@Test		
+	public void test15() {
+		try{
+			System.out.println("TEST 15");
+			AvailabilityResult availabilityResult = searchEngine.search("FCO", "AMS", 300, 2, 2, 2);
+			assertNotNull(availabilityResult);
+			assertThat(availabilityResult.getResult(),is(ResultType.OK));
+			assertThat(getFlights(availabilityResult), arrayContainingInAnyOrder("VY4840"));
+			assertThat(getTotalAmountByFlight(availabilityResult), arrayContainingInAnyOrder("714,72"));
+			printResult(availabilityResult);	
+		}catch (SearchCriteriaException e){
+			e.printStackTrace();
+		}
+	}	
+	
+	@Test		
+	public void test16() {
+		try{
+			System.out.println("TEST 16");
+			AvailabilityResult availabilityResult = searchEngine.search("MAD", "FRA", 20, 3, 3, 3);
+			assertNotNull(availabilityResult);
+			assertThat(availabilityResult.getResult(),is(ResultType.OK));
+			assertThat(getFlights(availabilityResult), arrayContainingInAnyOrder("BA8982"));
+			assertThat(getTotalAmountByFlight(availabilityResult), arrayContainingInAnyOrder("901,71"));
+			printResult(availabilityResult);	
+		}catch (SearchCriteriaException e){
+			e.printStackTrace();
+		}
+	}
 	
 	private void printResult(AvailabilityResult availabilityResult){		
 		if (availabilityResult != null){
