@@ -1,8 +1,5 @@
 package com.rumbo.favs.data.entities;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Infant Price by Airline class to work with jaxb and dom
@@ -11,19 +8,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  * @since   2016-10-07 
  */
-@XmlRootElement(name = "infantPrice")
-@XmlAccessorType (XmlAccessType.FIELD)
+
 public class InfantPrice {
 
 	private String iataCode;
 	private String name;
-	private String price;
+	private float price;
 	
 	public InfantPrice() {
 		super();
 	}
 
-	public InfantPrice(String iataCode, String name, String price) {
+	public InfantPrice(String iataCode, String name, float price) {
 		super();
 		this.iataCode = iataCode;
 		this.name = name;
@@ -46,11 +42,11 @@ public class InfantPrice {
 		this.name = name;
 	}
 
-	public String getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
@@ -60,8 +56,32 @@ public class InfantPrice {
 		int result = 1;
 		result = prime * result + ((iataCode == null) ? 0 : iataCode.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + Float.floatToIntBits(price);
 		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InfantPrice other = (InfantPrice) obj;
+		if (iataCode == null) {
+			if (other.iataCode != null)
+				return false;
+		} else if (!iataCode.equals(other.iataCode))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (Float.floatToIntBits(price) != Float.floatToIntBits(other.price))
+			return false;
+		return true;
 	}
 
 	@Override

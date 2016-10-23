@@ -1,6 +1,5 @@
 package com.rumbo.favs.data.dao;
 
-import com.rumbo.favs.data.entities.FlightGroup;
 
 /**
  * Flight DAO interfaz

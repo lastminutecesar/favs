@@ -14,10 +14,10 @@ import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.business.services.fare.impl.FarePriceImpl;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
-import com.rumbo.favs.data.dao.IDaysToDepartureDateDao;
-import com.rumbo.favs.data.dao.IDiscountByPassengerTypeDao;
+import com.rumbo.favs.data.dao.IDepartureDateDao;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.dao.IFlightDao;
-import com.rumbo.favs.data.dao.IInfantPricesDao;
+import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.dao.ServiceFactory;
 import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.utilities.ManageProperties;
@@ -33,17 +33,17 @@ public class SearchEngineImpl implements ISearchEngine{
 	
 	private ManageProperties manageProperties = new ManageProperties();
 	
-	private IAirportDao airportDao;
+	IAirportDao airportDao;
 	
 	private IFlightDao flightDao;
 	
 	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
 	
-	private IDaysToDepartureDateDao daysToDepartureDao;
+	private IDepartureDateDao daysToDepartureDao;
 	
-	private IDiscountByPassengerTypeDao discountByPassengerDao;
+	private IPassengerDiscountDao discountByPassengerDao;
 	
-	private IInfantPricesDao infantPricesDao;
+	private IInfantPriceDao infantPricesDao;
 		
 	private Node nodeFlight = null;
 

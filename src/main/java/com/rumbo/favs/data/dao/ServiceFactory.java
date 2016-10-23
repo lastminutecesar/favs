@@ -2,8 +2,8 @@ package com.rumbo.favs.data.dao;
 
 import com.rumbo.favs.data.dao.impl.AirportDaoImpl;
 import com.rumbo.favs.data.dao.impl.ApplicationConfigurationByPassengerTypeDaoImpl;
-import com.rumbo.favs.data.dao.impl.DaysToDepartureDateDaoImpl;
-import com.rumbo.favs.data.dao.impl.DiscountByPassengerTypeDaoImpl;
+import com.rumbo.favs.data.dao.impl.DepartureDateDaoImpl;
+import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
 import com.rumbo.favs.data.dao.impl.FlightDaoImpl;
 import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
 
@@ -20,7 +20,7 @@ public class ServiceFactory {
 		return new FlightDaoImpl();
 	}
 	
-	public static IInfantPricesDao getInfantPricesDaoFactory() {
+	public static IInfantPriceDao getInfantPricesDaoFactory() {
 		return new InfantPriceDaoImpl();
 	}
 	
@@ -28,12 +28,12 @@ public class ServiceFactory {
 		return new ApplicationConfigurationByPassengerTypeDaoImpl();
 	}
 	
-	public static IDaysToDepartureDateDao getDaysToDepartureDateDaoFactory() {
-		return new DaysToDepartureDateDaoImpl();
+	public static IDepartureDateDao getDaysToDepartureDateDaoFactory() {
+		return new DepartureDateDaoImpl();
 	}
 	
-	public static IDiscountByPassengerTypeDao getDiscountByPassengerTypeDaoFactory() {
-		return new DiscountByPassengerTypeDaoImpl();
+	public static IPassengerDiscountDao getDiscountByPassengerTypeDaoFactory() {
+		return new PassengerDiscountDaoImpl();
 	}
 	
 	public static IAirportDao getAirportDaoFactory() {

@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.rumbo.favs.data.dao.IAirportDao;
+import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.Airport;
+import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**
- * Airport DAO Impl
- * Manage departure and arrival cities
+ * DiscountByPassengerType DAO
+ * Manage discount by passenger type
  * 
  * This implimentation works with csv files
  * and turn the information into dom object
@@ -21,14 +23,14 @@ import com.rumbo.favs.data.entities.Airport;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class AirportDaoImpl implements IAirportDao{
+public class PassengerDiscountDaoImpl implements IPassengerDiscountDao{
 	
-	private final String AIRPORTS_FILE = "src/main/resources/files/airports.csv";
+	private final String PASSENGERDISCOUNT_FILE = "src/main/resources/files/passengerDiscounts.csv";
 	
-	private Map<String,String> airports = new HashMap<>();
+	private Map<PassengerType,PassengerDiscount> passengerDiscounts = new HashMap<>();
 	
-	public AirportDaoImpl(){
-		csvToObject(AIRPORTS_FILE);
+	public PassengerDiscountDaoImpl(){
+		csvToObject(PASSENGERDISCOUNT_FILE);
 	}
 	
 	private void csvToObject(String csvFile){
@@ -42,8 +44,9 @@ public class AirportDaoImpl implements IAirportDao{
 			try {				
 				br = new BufferedReader(new FileReader(csvFile));
 				while ((line = br.readLine()) != null) {
-					String[] csvAirport = line.split(splitBy);
-					airports.put(csvAirport[0], csvAirport[1]);
+					String[] csvPassengerDiscount = line.split(splitBy);
+					PassengerDiscount passengerDiscount = new PassengerDiscount(PassengerType.valueOf(csvPassengerDiscount[0]), Float.parseFloat(csvPassengerDiscount[1]));
+					passengerDiscounts.put(PassengerType.valueOf(csvPassengerDiscount[0]), passengerDiscount);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -67,15 +70,12 @@ public class AirportDaoImpl implements IAirportDao{
 	 * @param String iataCode
 	 * @return InfantPrice
 	 */
-	public Airport getAirportByIataCode(String iataCode) {
+	public PassengerDiscount getDiscount(PassengerType passengerType) {
 					
-		if (iataCode != null && !iataCode.isEmpty()){		    
-		    String city = airports.get(iataCode);
-		    if (city != null){
-		    	return new Airport(iataCode,city);
-		    }
+		if (passengerType != null){		    
+			return passengerDiscounts.get(passengerType);
 		} 		
 		return null;
 	}
-		
+	
 }

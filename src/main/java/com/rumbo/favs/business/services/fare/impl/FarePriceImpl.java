@@ -12,12 +12,12 @@ import com.rumbo.favs.business.bean.search.SearchCriteria;
 import com.rumbo.favs.business.enums.configuration.ApplicationConfigurationType;
 import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
-import com.rumbo.favs.data.dao.IDaysToDepartureDateDao;
-import com.rumbo.favs.data.dao.IDiscountByPassengerTypeDao;
-import com.rumbo.favs.data.dao.IInfantPricesDao;
+import com.rumbo.favs.data.dao.IDepartureDateDao;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
+import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerType;
-import com.rumbo.favs.data.entities.DaysToDepartureDate;
-import com.rumbo.favs.data.entities.DiscountByPassengerType;
+import com.rumbo.favs.data.entities.DepartureDate;
+import com.rumbo.favs.data.entities.PassengerDiscount;
 import com.rumbo.favs.data.entities.Flight;
 import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.entities.InfantPrice;
@@ -37,11 +37,11 @@ public class FarePriceImpl implements IFarePrice{
 	
 	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
 	
-	private IDiscountByPassengerTypeDao discountByPassengerTypeDao;
+	private IPassengerDiscountDao discountByPassengerTypeDao;
 	
-	private IDaysToDepartureDateDao daysToDepartureDateDao;
+	private IDepartureDateDao daysToDepartureDateDao;
 	
-	private IInfantPricesDao infantPricesDao;	
+	private IInfantPriceDao infantPricesDao;	
 
 	private String active = "1";
 	
@@ -50,9 +50,9 @@ public class FarePriceImpl implements IFarePrice{
 	}
 	
 	public FarePriceImpl(IApplicationConfigurationByPassengerTypeDao appliConfigDao,
-							IDaysToDepartureDateDao daysToDepartureDateDao,
-							IDiscountByPassengerTypeDao discountByPassengerTypeDao,
-							IInfantPricesDao infantPricesDao){
+							IDepartureDateDao daysToDepartureDateDao,
+							IPassengerDiscountDao discountByPassengerTypeDao,
+							IInfantPriceDao infantPricesDao){
 		super();
 		this.appliConfigDao = appliConfigDao;
 		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
@@ -236,7 +236,7 @@ public class FarePriceImpl implements IFarePrice{
 					active.equals(applicationConfigurationByPassengerType.getPropertyValuByPassengerTypepassengerType(passengerType))){
 				
 				// Get info discount
-				DaysToDepartureDate daysToDepartureDate = daysToDepartureDateDao.getDiscountPercent(daysToDeparture);
+				DepartureDate daysToDepartureDate = daysToDepartureDateDao.getDiscountPercent(daysToDeparture);
 				
 				if(daysToDepartureDate != null && !daysToDepartureDate.getDiscountPercent().isEmpty()){
 					dateDiscount = Float.parseFloat(daysToDepartureDate.getDiscountPercent());
@@ -254,7 +254,7 @@ public class FarePriceImpl implements IFarePrice{
 					active.equals(applicationConfigurationByPassengerType.getPropertyValuByPassengerTypepassengerType(passengerType))){
 				
 				// Get info discount
-				DiscountByPassengerType discountByPassengerType = discountByPassengerTypeDao.getDiscountPercent(passengerType);
+				PassengerDiscount discountByPassengerType = discountByPassengerTypeDao.getDiscountPercent(passengerType);
 				
 				if(discountByPassengerType != null && !discountByPassengerType.getDiscountPercent().isEmpty()){
 					passengerDiscount = Float.parseFloat(discountByPassengerType.getDiscountPercent());

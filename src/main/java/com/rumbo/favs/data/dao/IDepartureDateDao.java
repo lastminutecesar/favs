@@ -1,6 +1,6 @@
 package com.rumbo.favs.data.dao;
 
-import com.rumbo.favs.data.entities.DaysToDepartureDate;
+import com.rumbo.favs.data.entities.DepartureDate;
 
 /**
  * DaysToDepartureDate DAO interfaz
@@ -10,7 +10,7 @@ import com.rumbo.favs.data.entities.DaysToDepartureDate;
  * @version 1.0
  * @since   2016-10-07 
  */
-public interface IDaysToDepartureDateDao {
+public interface IDepartureDateDao {
 
 	public static final String MIN = "min";
 	public static final String MAX = "max";
@@ -23,6 +23,6 @@ public interface IDaysToDepartureDateDao {
 	 * @param int days
 	 * @return DaysToDepartureDate
 	 */
-	public DaysToDepartureDate getDiscountPercent(int days);
+	public DepartureDate getDiscount(int days);
 	
 }

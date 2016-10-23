@@ -15,9 +15,10 @@ public class SearchCriteriaException extends RuntimeException{
 	
 	public static final String ERROR_DEPARTURE_CITY = "Departure city not exists";
 	public static final String ERROR_DESTINATION_CITY = "Arrival city not exists";
-	public static final String ERROR_DEPARTURE_DATE = "Departure city has to be greater than 0";
-	public static final String ERROR_NUM_PASSENGERS = "Passengers have to be greater than 0";
+	public static final String ERROR_DEPARTURE_DATE = "Departure city has to be greater than 0 and less than 366";
+	public static final String ERROR_NUM_PASSENGERS = "Passengers have to be greater than 0 and less than 10";
 	public static final String ERROR_NONE_PASSENGERS = "At least one passenger must flight";
+	public static final String ERROR_FATAL_PASSENGERS = "Fatal Error in passengers";
 	public static final String ERROR_BBDD_CONNECTION = "BBDD error connection";
 			   
     public SearchCriteriaException(String errorType) {

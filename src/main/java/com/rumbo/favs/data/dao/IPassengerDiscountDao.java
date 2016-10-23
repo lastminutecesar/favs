@@ -1,7 +1,7 @@
 package com.rumbo.favs.data.dao;
 
 import com.rumbo.favs.business.bean.PassengerType;
-import com.rumbo.favs.data.entities.DiscountByPassengerType;
+import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**
  * DiscountByPassengerType DAO interfaz
@@ -11,7 +11,7 @@ import com.rumbo.favs.data.entities.DiscountByPassengerType;
  * @version 1.0
  * @since   2016-10-07 
  */
-public interface IDiscountByPassengerTypeDao {
+public interface IPassengerDiscountDao {
 
 	public static final String PASSENGERTYPE = "passengerType";
 	public static final String DISCOUNTPERCENT = "discountPercent";
@@ -22,6 +22,6 @@ public interface IDiscountByPassengerTypeDao {
 	 * @param PassengerType passengerType
 	 * @return DiscountByPassengerType
 	 */
-	public DiscountByPassengerType getDiscountPercent(PassengerType passengerType);
+	public PassengerDiscount getDiscount(PassengerType passengerType);
 	
 }

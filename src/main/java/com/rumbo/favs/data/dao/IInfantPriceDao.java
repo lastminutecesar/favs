@@ -10,7 +10,7 @@ import com.rumbo.favs.data.entities.InfantPrice;
  * @version 1.0
  * @since   2016-10-07 
  */
-public interface IInfantPricesDao {
+public interface IInfantPriceDao {
 
 	public static final String IATACODE = "iataCode";
 	public static final String NAME = "name";
