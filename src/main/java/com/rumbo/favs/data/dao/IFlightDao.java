@@ -1,5 +1,8 @@
 package com.rumbo.favs.data.dao;
 
+import java.util.List;
+
+import com.rumbo.favs.data.entities.Flight;
 
 /**
  * Flight DAO interfaz
@@ -23,6 +26,6 @@ public interface IFlightDao {
 	 * @param String destination
 	 * @return FlightGroup
 	 */
-	public FlightGroup getFlightsByItinerary(String origin, String destination);
+	public List<Flight> getFlightsByItinerary(String origin, String destination);
 	
 }

@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,10 +21,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.rumbo.favs.data.dao.IFlightDao;
-import com.rumbo.favs.data.entities.AirportGroup;
 import com.rumbo.favs.data.entities.Flight;
-import com.rumbo.favs.data.entities.FlightGroup;
-import com.rumbo.favs.data.utilities.ManageProperties;
 
 /**
  * Flight DAO 
@@ -37,58 +36,36 @@ import com.rumbo.favs.data.utilities.ManageProperties;
  * @since   2016-10-07 
  */
 public class FlightDaoImpl implements IFlightDao {
-		
-	private Node nodeFlight = null;
 	
-	private final String FLIGHTSFILE = "flightsFile";
+	private final String FLIGHTS_FILE = "src/main/resources/files/flights.csv";
 	
-	private final String CSVEXTENSION = ".csv";
+	private List<Flight> flights;
 	
 	public FlightDaoImpl(){
-		loadFile();
+		flights = new ArrayList<>();
+		csvToObject(FLIGHTS_FILE);
 	}
-	
-	/**
-	 * Get csv file name from properties file
-	 * and turn the information into dom object
-	 * 
-	 */
-	private void loadFile(){
-		
-		ManageProperties manageProperties = new ManageProperties();
-		
-		String csvFileResourceFolder = manageProperties.getConfigProperty(ManageProperties.CSV_FILE_RESOURCE_FOLDER);
-		
-		if (csvFileResourceFolder != null && !csvFileResourceFolder.isEmpty()){						
-			
-			String flightFile = manageProperties.getFilesProperty(FLIGHTSFILE);			
-			if (flightFile != null && !flightFile.isEmpty()){
-				csvToXmlFlight(csvFileResourceFolder + flightFile + CSVEXTENSION);
-			}
-		}		
-	}	
-	
+
 	/**
 	 * From csvFile turn the information into dom object
 	 * 
 	 * @param csvFile
 	 */
-	private void csvToXmlFlight(String csvFile) {
+	private void csvToObject(String csvFile) {
 		
 		if (csvFile != null && !csvFile.isEmpty()){
 			
 			BufferedReader br = null;
 			String line = "";
 			String splitBy = ",";
-			FlightGroup flightGroup = new FlightGroup();
 
 			// Read csv file
 			try {				
 				br = new BufferedReader(new FileReader(csvFile));
 				while ((line = br.readLine()) != null) {
 					String[] csvFlight = line.split(splitBy);
-					Flight flight = new Flight(csvFlight[0],csvFlight[1],csvFlight[2],csvFlight[3]);
-					flightGroup.getFlightGroup().add(flight);
+					Flight flight = new Flight(csvFlight[0],csvFlight[1],csvFlight[2],Float.parseFloat(csvFlight[3]));
+					flights.add(flight);
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -105,21 +82,6 @@ public class FlightDaoImpl implements IFlightDao {
 					}
 				}
 			}
-			
-			// Get dom object through JAXB
-			try {
-				JAXBContext jaxbContext = JAXBContext.newInstance(FlightGroup.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				
-				DOMResult res = new DOMResult();
-				jaxbMarshaller.marshal(flightGroup, res);
-				
-				if (res != null){
-					setNodeFlight(res.getNode());
-				}				
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -130,71 +92,22 @@ public class FlightDaoImpl implements IFlightDao {
 	 * @param String destination
 	 * @return FlightGroup
 	 */
-	public FlightGroup getFlightsByItinerary(String origin, String destination) {
+	public List<Flight> getFlightsByItinerary(String origin, String destination) {
 		
-		FlightGroup flights = new FlightGroup();
-				
-		try {			
-			if (getNodeFlight() != null){
-			    
-			    XPath xPath =  XPathFactory.newInstance().newXPath();
-				
-			    //Query
-				String expression = "/flightGroup/flight[" + IFlightDao.ORIGIN + "='" + origin + "' and " + IFlightDao.DESTINATION + "='" + destination  + "']";		    
-				NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(getNodeFlight(), XPathConstants.NODESET);
-				
-				//None result
-				if (nodeList.getLength() == 0){
-					return null;
+		List<Flight> flightsReturn = new ArrayList<>();
+		
+		if (origin != null && !origin.isEmpty()
+				&& destination != null && !destination.isEmpty()){
+			
+			Flight flightSearch = new Flight(origin, destination);
+			
+			for(Flight flight : flights){
+				if (flight.equals(flightSearch)){
+					flightsReturn.add(flight);
 				}
-				
-				// Iterate query result
-				for (int i = 0; i < nodeList.getLength(); i++) {
-		            Node nNode = nodeList.item(i);
-		            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-		               Element element = (Element) nNode;
-		               Flight flight = getFlight(element);
-		               if (flight != null){
-		            	   flights.getFlightGroup().add(flight);
-		               }
-		            }
-		         }
-			}		
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+			}			
 		}
-		
-		return flights;
+		return flightsReturn;
 	}
-	
-	/**
-	 * Get flight from dom object
-	 * 
-	 * @param element 
-	 * @return Flight
-	 */
-	private Flight getFlight(Element element){
 		
-		Flight flight = null;
-		
-		if (element != null){
-			flight = new Flight(element.getElementsByTagName(IFlightDao.ORIGIN).item(0).getTextContent(),
-					element.getElementsByTagName(IFlightDao.DESTINATION).item(0).getTextContent(),
-					element.getElementsByTagName(IFlightDao.AIRLINE).item(0).getTextContent(),
-					element.getElementsByTagName(IFlightDao.BASEPRICE).item(0).getTextContent());			
-		}		
-		
-		return flight;
-	}
-
-	public Node getNodeFlight() {
-		return nodeFlight;
-	}
-
-	public void setNodeFlight(Node nodeFlight) {
-		this.nodeFlight = nodeFlight;
-	}
-	
 }

@@ -1,9 +1,5 @@
 package com.rumbo.favs.data.entities;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Itinerary class to work with jaxb and dom
  * 
@@ -11,21 +7,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  * @since   2016-10-07 
  */
-@XmlRootElement(name = "flight")
-@XmlAccessorType (XmlAccessType.FIELD)
 public class Flight {
 
 	private String origin;
 	private String destination;
 	private String airline;
-	private String basePrice;
+	private float basePrice;
 			
 	public Flight() {
-		super();
 	}
 
-	public Flight(String origin, String destination, String airline, String basePrice) {
-		super();
+	public Flight(String origin, String destination) {
+		this.origin = origin;
+		this.destination = destination;
+	}
+	
+	public Flight(String origin, String destination, String airline, float basePrice) {
 		this.origin = origin;
 		this.destination = destination;
 		this.airline = airline;
@@ -56,11 +53,11 @@ public class Flight {
 		this.airline = airline;
 	}
 	
-	public String getBasePrice() {
+	public float getBasePrice() {
 		return basePrice;
 	}
 	
-	public void setBasePrice(String basePrice) {
+	public void setBasePrice(float basePrice) {
 		this.basePrice = basePrice;
 	}
 
@@ -69,10 +66,29 @@ public class Flight {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((airline == null) ? 0 : airline.hashCode());
-		result = prime * result + ((basePrice == null) ? 0 : basePrice.hashCode());
+		result = prime * result + Float.floatToIntBits(basePrice);
 		result = prime * result + ((destination == null) ? 0 : destination.hashCode());
 		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
 		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		Flight flight = (Flight) obj;
+
+		if (flight != null){
+			if (origin != null && destination != null
+					&& flight.getOrigin() != null && flight.getDestination() != null){
+				return origin.equals(flight.getOrigin()) && destination.equals(flight.getDestination());
+			}else{
+				return false;
+			}
+			
+		}else{
+			return false;
+		}
+		
 	}
 
 	@Override
