@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.rumbo.favs.data.dao.IInfantPriceDao;
+import com.rumbo.favs.data.entities.DepartureDate;
 import com.rumbo.favs.data.entities.InfantPrice;
 
 /**
@@ -18,7 +19,7 @@ import com.rumbo.favs.data.entities.InfantPrice;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class InfantPriceDaoImpl implements IInfantPriceDao{
+public class InfantPriceDaoImpl extends GenericDao implements IInfantPriceDao{
 	
 	private final String INFANTPRICES_FILE = "src/main/resources/files/infantPrices.csv";
 	
@@ -27,45 +28,13 @@ public class InfantPriceDaoImpl implements IInfantPriceDao{
 	public InfantPriceDaoImpl(){
 		csvToObject(INFANTPRICES_FILE);
 	}
-
 	
-	/**
-	 * From csvFile turn the information into dom object
-	 * 
-	 * @param csvFile
-	 */
-	private void csvToObject(String csvFile) {
+	protected void processLine(String[] line) {
 		
-		if (csvFile != null && !csvFile.isEmpty()){
-			
-			BufferedReader br = null;
-			String line = "";
-			String splitBy = ",";
-
-			// Read csv file
-			try {				
-				br = new BufferedReader(new FileReader(csvFile));
-				while ((line = br.readLine()) != null) {
-					String[] csvInfantPrice = line.split(splitBy);
-					InfantPrice infantPrice = new InfantPrice(csvInfantPrice[0],csvInfantPrice[1],Float.parseFloat(csvInfantPrice[2]));
-					infantPrices.put(csvInfantPrice[0], infantPrice);
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+		if (line.length > 2){
+			InfantPrice infantPrice = new InfantPrice(line[0],line[1],Float.parseFloat(line[2]));
+			infantPrices.put(line[0], infantPrice);		
+		}	
 	}
 
 	/**

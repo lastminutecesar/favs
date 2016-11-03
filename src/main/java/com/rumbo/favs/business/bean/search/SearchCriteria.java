@@ -1,5 +1,6 @@
 package com.rumbo.favs.business.bean.search;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -7,6 +8,8 @@ import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;
+import com.rumbo.favs.data.entities.Flight;
+import com.rumbo.favs.data.entities.Flight.Builder;
 
 
 /**
@@ -32,24 +35,20 @@ public class SearchCriteria {
 	public static final int MAX_PASSENGERS = 9;
 	
 	public SearchCriteria() {
-		super();
-	}
-	
-	public SearchCriteria(Itinerary itinerary, int daysToDeparture, Map<PassengerType,Integer> passengers, IAirportDao airportDao) throws SearchCriteriaException{
-		this.itinerary = itinerary;
-		this.daysToDeparture = daysToDeparture;
-		this.passengers = passengers;
-		this.airportDao = airportDao;
-		
-		validate();
 	}
 	
 	public SearchCriteria(Itinerary itinerary, int daysToDeparture, Map<PassengerType,Integer> passengers) throws SearchCriteriaException{
 		this.itinerary = itinerary;
 		this.daysToDeparture = daysToDeparture;
 		this.passengers = passengers;
-		
-		validate();
+	}
+	
+	public static Builder builder(){
+		return new SearchCriteria.Builder();
+	}
+	
+	public static PassengerBuilder<PassengerType, Integer> passengerBuilder(){
+		return new SearchCriteria.PassengerBuilder<>();
 	}
 	
 	/**
@@ -57,7 +56,7 @@ public class SearchCriteria {
 	 * 
 	 * @return String with message exception
 	 */
-	 private void validate() throws SearchCriteriaException{
+	 public void validate() throws SearchCriteriaException{
 
 		validateItinerary(getItinerary());
 		validateDays(getDaysToDeparture());
@@ -127,28 +126,70 @@ public class SearchCriteria {
 		return daysToDeparture;
 	}
 	
-	public void setDaysToDeparture(int daysToDeparture) {
-		this.daysToDeparture = daysToDeparture;
-	}
-	
 	public Map<PassengerType, Integer> getPassengers() {
 		return passengers;
-	}
-	
-	public void setPassengers(Map<PassengerType, Integer> passengers) {
-		this.passengers = passengers;
 	}
 
 	public Itinerary getItinerary() {
 		return itinerary;
 	}
-
-	public void setItinerary(Itinerary itinerary) {
-		this.itinerary = itinerary;
-	}
-
+	
 	public void setAirportDao(IAirportDao airportDao) {
 		this.airportDao = airportDao;
 	}
+	
+	public static class Builder {
+		
+		private Itinerary itinerary = new Itinerary();
+		private int daysToDeparture = 0;
+		private Map<PassengerType,Integer> passengers = new TreeMap<PassengerType, Integer>();
+		private IAirportDao airportDao;
+		
+		public Builder withDaysToDeparture(int daysToDeparture){
+			this.daysToDeparture = daysToDeparture;
+			return this;
+		}
+		
+		public Builder withDao(IAirportDao airportDao){
+			this.airportDao = airportDao;
+			return this;
+		}
+		
+		public Builder withItinerary(Itinerary itinerary){		
+			this.itinerary = itinerary;
+			return this;
+		}
+		
+		public Builder withPassengers(Map<PassengerType,Integer> passengers){		
+			this.passengers = passengers;
+			return this;
+		}
+		
+	    public SearchCriteria build() throws SearchCriteriaException{
+	    	SearchCriteria searchCriteria = new SearchCriteria(itinerary, daysToDeparture, passengers);
+	    	searchCriteria.setAirportDao(airportDao);
+	    	searchCriteria.validate();
+	        return searchCriteria;
+	    }
+	}
+	
+	public static class PassengerBuilder<PassengerType,Integer> {
+		
+		private Map<PassengerType,Integer> passengers;
+		
+	    public PassengerBuilder() {
+	        this.passengers = new HashMap<PassengerType,Integer>();
+	    }
+		
+	    public PassengerBuilder<PassengerType,Integer> withPassenger(PassengerType k, Integer v) {
+	    	passengers.put(k, v);
+	        return this;
+	    }
+
+	    public Map<PassengerType,Integer> build() {
+	        return passengers;
+	    }		
+	}
+
 	
 }

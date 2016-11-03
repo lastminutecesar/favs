@@ -14,11 +14,9 @@ public class BreakDownPrice {
 	float dateDiscount;
 		
 	public BreakDownPrice() {
-		super();
 	}
 
 	public BreakDownPrice(float basePrice, float passengerDiscount, float dateDiscount) {
-		super();
 		this.basePrice = basePrice;
 		this.passengerDiscount = passengerDiscount;
 		this.dateDiscount = dateDiscount;

@@ -6,7 +6,6 @@ public class Itinerary {
 	private String arrivalAirport;
 		
 	public Itinerary() {
-		super();
 	}
 
 	public Itinerary(String departureAirport, String arrivalAirport) {
@@ -14,20 +13,72 @@ public class Itinerary {
 		this.arrivalAirport = arrivalAirport;
 	}
 	
-	public String getDepartureAirport() {
-		return departureAirport;
+	public static Builder builder(){
+		return new Itinerary.Builder();
 	}
 	
-	public void setDepartureAirport(String departureAirport) {
-		this.departureAirport = departureAirport;
+	public String getDepartureAirport() {
+		return departureAirport;
 	}
 	
 	public String getArrivalAirport() {
 		return arrivalAirport;
 	}
 	
-	public void setArrivalAirport(String arrivalAirport) {
-		this.arrivalAirport = arrivalAirport;
-	}	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arrivalAirport == null) ? 0 : arrivalAirport.hashCode());
+		result = prime * result + ((departureAirport == null) ? 0 : departureAirport.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Itinerary other = (Itinerary) obj;
+		if (arrivalAirport == null) {
+			if (other.arrivalAirport != null)
+				return false;
+		} else if (!arrivalAirport.equals(other.arrivalAirport))
+			return false;
+		if (departureAirport == null) {
+			if (other.departureAirport != null)
+				return false;
+		} else if (!departureAirport.equals(other.departureAirport))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Itinerary [departureAirport=" + departureAirport + ", arrivalAirport=" + arrivalAirport + "]";
+	}
+
+	public static class Builder{
+		private String departureAirport;
+		private String arrivalAirport;
+		
+		public Builder withDepartureAirport(String departureAirport){
+			this.departureAirport = departureAirport;
+			return this;
+		}
+		
+		public Builder withArrivalAirport(String arrivalAirport){
+			this.arrivalAirport = arrivalAirport;
+			return this;
+		}
+		
+		public Itinerary build(){
+			return new Itinerary(departureAirport,arrivalAirport);
+		}
+		
+	}
 	
 }

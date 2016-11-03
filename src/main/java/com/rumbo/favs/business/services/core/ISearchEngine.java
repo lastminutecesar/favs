@@ -2,6 +2,7 @@ package com.rumbo.favs.business.services.core;
 
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.AvailabilityResult;
+import com.rumbo.favs.business.bean.search.SearchCriteria;
 
 /**
  * Main business interface
@@ -23,6 +24,6 @@ public interface ISearchEngine {
 	 * @return search result
 	 * @throws SearchCriteriaException
 	 */
-	public AvailabilityResult search(String origin, String destination, int daysToDeparture, int numAdult, int numChild, int numInfant)  throws SearchCriteriaException;
+	public AvailabilityResult search(SearchCriteria searchCriteria)  throws SearchCriteriaException;
 	
 }

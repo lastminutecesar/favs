@@ -1,8 +1,7 @@
 package com.rumbo.favs.business.services.core.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.w3c.dom.Node;
 
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.AvailabilityResult;
@@ -11,16 +10,9 @@ import com.rumbo.favs.business.bean.search.SearchCriteria;
 import com.rumbo.favs.business.enums.result.ResultType;
 import com.rumbo.favs.business.services.core.ISearchEngine;
 import com.rumbo.favs.business.services.fare.IFarePrice;
-import com.rumbo.favs.business.services.fare.impl.FarePriceImpl;
-import com.rumbo.favs.data.dao.IAirportDao;
-import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
-import com.rumbo.favs.data.dao.IDepartureDateDao;
-import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.dao.IFlightDao;
-import com.rumbo.favs.data.dao.IInfantPriceDao;
-import com.rumbo.favs.data.dao.ServiceFactory;
-import com.rumbo.favs.data.entities.FlightGroup;
-import com.rumbo.favs.data.utilities.ManageProperties;
+import com.rumbo.favs.data.entities.Flight;
+import com.rumbo.favs.data.utilities.Message;
 
 /**
  * Main business class
@@ -31,37 +23,12 @@ import com.rumbo.favs.data.utilities.ManageProperties;
  */
 public class SearchEngineImpl implements ISearchEngine{
 	
-	private ManageProperties manageProperties = new ManageProperties();
+	private IFlightDao flightDao;	
+	private IFarePrice farePrice;	
+	private Message message;
 	
-	IAirportDao airportDao;
-	
-	private IFlightDao flightDao;
-	
-	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
-	
-	private IDepartureDateDao daysToDepartureDao;
-	
-	private IPassengerDiscountDao discountByPassengerDao;
-	
-	private IInfantPriceDao infantPricesDao;
-		
-	private Node nodeFlight = null;
-
 	public SearchEngineImpl(){
-		
-		//Instance daos for business only once
-		
-		airportDao = ServiceFactory.getAirportDaoFactory();
-		
-		flightDao = ServiceFactory.getFlightDaoFactory();
-		
-		appliConfigDao = ServiceFactory.getApplicationConfigurationByPassengerTypeDaoFactory();
-		
-		daysToDepartureDao = ServiceFactory.getDaysToDepartureDateDaoFactory();
-		
-		discountByPassengerDao = ServiceFactory.getDiscountByPassengerTypeDaoFactory();
-		
-		infantPricesDao = ServiceFactory.getInfantPricesDaoFactory();
+		message = new Message();
 	}
 
 	/**
@@ -70,21 +37,23 @@ public class SearchEngineImpl implements ISearchEngine{
 	 * @return AvailabilityResult from search criteria
 	 * @throws SearchCriteriaException if any problem in search criteria
 	 */
-	public AvailabilityResult search(String origin, String destination, int daysToDeparture, int numAdult, int numChild, int numInfant) throws SearchCriteriaException{
+	public AvailabilityResult search(SearchCriteria searchCriteria) throws SearchCriteriaException{
 		
 		try{
-			SearchCriteria searchCriteria = new SearchCriteria(origin, destination, daysToDeparture, numAdult, numChild, numInfant, airportDao);
-			
 			{
-				// Search if exist flight combination
-				FlightGroup flights = flightDao.getFlightsByItinerary(searchCriteria.getDepartureCity(), searchCriteria.getArrivalCity());
+				List<Flight> flights = flightDao.getFlightsByItinerary(searchCriteria.getItinerary());
+				List<FlightResult> flightResultList = new ArrayList<>();
 				
 				// Exist flight combination
-				if (flights != null && flights.getFlightGroup().size() > 0){
-					IFarePrice farePrice = new FarePriceImpl(appliConfigDao, daysToDepartureDao, discountByPassengerDao, infantPricesDao);
-					List<FlightResult> flightResultList = farePrice.fare(searchCriteria, flights);
+				if (flights != null){
+					for(Flight flight : flights){
+						FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
+						if(flightResult != null){
+							flightResultList.add(flightResult);
+						}
+					}					
 					
-					if (flightResultList != null && !flightResultList.isEmpty()){
+					if (!flightResultList.isEmpty()){
 						return createAvailabilityResult(ResultType.OK, flightResultList);
 					}else{
 						return createAvailabilityResult(ResultType.KO, null);
@@ -111,18 +80,18 @@ public class SearchEngineImpl implements ISearchEngine{
 		AvailabilityResult availabilityResult = new AvailabilityResult();
 		
 		availabilityResult.setResult(resultType);
-		availabilityResult.setDescription(manageProperties.getMessageProperty(resultType.toString()));
+		availabilityResult.setDescription(message.getMessageProperty(resultType.toString()));
 		availabilityResult.setFlightResultList(flightResultList);
 		
 		return availabilityResult;
 	}
 
-	public Node getNodeFlight() {
-		return nodeFlight;
+	public void setFlightDao(IFlightDao flightDao) {
+		this.flightDao = flightDao;
 	}
 
-	public void setNodeFlight(Node nodeFlight) {
-		this.nodeFlight = nodeFlight;
-	}	
+	public void setFarePrice(IFarePrice farePrice) {
+		this.farePrice = farePrice;
+	}
 	
 }

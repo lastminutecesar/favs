@@ -22,7 +22,7 @@ import com.rumbo.favs.data.entities.DepartureDate;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class DepartureDateDaoImpl implements IDepartureDateDao{
+public class DepartureDateDaoImpl extends GenericDao implements IDepartureDateDao{
 	
 	private final String DEPARTUREDATE_FILE = "src/main/resources/files/departureDate.csv";
 	
@@ -31,46 +31,14 @@ public class DepartureDateDaoImpl implements IDepartureDateDao{
 	public DepartureDateDaoImpl(){
 		csvToObject(DEPARTUREDATE_FILE);
 	}
-	
-	/**
-	 * From csvFile turn the information into dom object
-	 * 
-	 * @param csvFile
-	 */
-	private void csvToObject(String csvFile) {
 		
-		if (csvFile != null && !csvFile.isEmpty()){
-			
-			BufferedReader br = null;
-			String line = "";
-			String splitBy = ",";
-			
-			// Read csv file
-			try {				
-				br = new BufferedReader(new FileReader(csvFile));
-				while ((line = br.readLine()) != null) {
-					String[] csvDaysToDepartureDate = line.split(splitBy);
-					DepartureDate departureDate = 
-							new DepartureDate(Integer.parseInt(csvDaysToDepartureDate[0]),Integer.parseInt(csvDaysToDepartureDate[1]),Float.parseFloat(csvDaysToDepartureDate[2]));
-					departureDates.add(departureDate);
-					
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+	protected void processLine(String[] line) {
+		
+		if (line.length > 2){
+			DepartureDate departureDate = 
+					new DepartureDate(Integer.parseInt(line[0]),Integer.parseInt(line[1]),Float.parseFloat(line[2]));
+			departureDates.add(departureDate);			
+		}	
 	}
 	
 	/**

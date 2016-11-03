@@ -1,8 +1,5 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +18,7 @@ import com.rumbo.favs.data.entities.Airport;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class AirportDaoImpl implements IAirportDao{
+public class AirportDaoImpl extends GenericDao implements IAirportDao{
 	
 	private final String AIRPORTS_FILE = "src/main/resources/files/airports.csv";
 	
@@ -31,35 +28,12 @@ public class AirportDaoImpl implements IAirportDao{
 		csvToObject(AIRPORTS_FILE);
 	}
 	
-	private void csvToObject(String csvFile){
+	protected void processLine(String[] line) {
 		
-		if (csvFile != null && !csvFile.isEmpty()){			
-			BufferedReader br = null;
-			String line = "";
-			String splitBy = ",";
-			
-			// Read csv file
-			try {				
-				br = new BufferedReader(new FileReader(csvFile));
-				while ((line = br.readLine()) != null) {
-					String[] csvAirport = line.split(splitBy);
-					airports.put(csvAirport[0], csvAirport[1]);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
+		if (line.length > 1){
+			airports.put(line[0], line[1]);				
+		}	
+	}	
 	
 	/**
 	 * Get airport by city iata code

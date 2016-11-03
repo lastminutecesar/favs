@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.data.entities.FlightGroup;
+import com.rumbo.favs.data.dao.IDepartureDateDao;
+import com.rumbo.favs.data.dao.IInfantPriceDao;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
+import com.rumbo.favs.data.entities.Flight;
 
 /**
  * Main fare interface
@@ -21,6 +24,12 @@ public interface IFarePrice {
 	 * @return price's breakdown
 	 * 
 	 * */
-	public List<FlightResult> fare(SearchCriteria searchCriteria, FlightGroup flights);
+	public FlightResult getFlightResult(SearchCriteria searchCriteria, Flight flights);	
+
+	public void setDiscountByPassengerTypeDao(IPassengerDiscountDao discountByPassengerTypeDao);
+
+	public void setDaysToDepartureDateDao(IDepartureDateDao daysToDepartureDateDao);
+
+	public void setInfantPricesDao(IInfantPriceDao infantPricesDao);
 	
 }

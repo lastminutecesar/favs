@@ -9,6 +9,7 @@ import java.util.Map;
 import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.Airport;
+import com.rumbo.favs.data.entities.InfantPrice;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**
@@ -23,7 +24,7 @@ import com.rumbo.favs.data.entities.PassengerDiscount;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class PassengerDiscountDaoImpl implements IPassengerDiscountDao{
+public class PassengerDiscountDaoImpl extends GenericDao implements IPassengerDiscountDao{
 	
 	private final String PASSENGERDISCOUNT_FILE = "src/main/resources/files/passengerDiscounts.csv";
 	
@@ -31,37 +32,14 @@ public class PassengerDiscountDaoImpl implements IPassengerDiscountDao{
 	
 	public PassengerDiscountDaoImpl(){
 		csvToObject(PASSENGERDISCOUNT_FILE);
-	}
+	}	
 	
-	private void csvToObject(String csvFile){
+	protected void processLine(String[] line) {
 		
-		if (csvFile != null && !csvFile.isEmpty()){			
-			BufferedReader br = null;
-			String line = "";
-			String splitBy = ",";
-			
-			// Read csv file
-			try {				
-				br = new BufferedReader(new FileReader(csvFile));
-				while ((line = br.readLine()) != null) {
-					String[] csvPassengerDiscount = line.split(splitBy);
-					PassengerDiscount passengerDiscount = new PassengerDiscount(PassengerType.valueOf(csvPassengerDiscount[0]), Float.parseFloat(csvPassengerDiscount[1]));
-					passengerDiscounts.put(PassengerType.valueOf(csvPassengerDiscount[0]), passengerDiscount);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
+		if (line.length > 1){
+			PassengerDiscount passengerDiscount = new PassengerDiscount(PassengerType.valueOf(line[0]), Float.parseFloat(line[1]));
+			passengerDiscounts.put(PassengerType.valueOf(line[0]), passengerDiscount);	
+		}	
 	}
 	
 	/**

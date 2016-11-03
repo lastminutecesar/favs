@@ -1,5 +1,7 @@
 package com.rumbo.favs.business.services.fare.impl;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,18 +11,14 @@ import com.rumbo.favs.business.bean.result.BreakDownPrice;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.result.TravellerPrice;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.business.enums.configuration.ApplicationConfigurationType;
 import com.rumbo.favs.business.services.fare.IFarePrice;
-import com.rumbo.favs.data.dao.IApplicationConfigurationByPassengerTypeDao;
 import com.rumbo.favs.data.dao.IDepartureDateDao;
-import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.dao.IInfantPriceDao;
-import com.rumbo.favs.data.entities.ApplicationConfigurationByPassengerType;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.DepartureDate;
-import com.rumbo.favs.data.entities.PassengerDiscount;
 import com.rumbo.favs.data.entities.Flight;
-import com.rumbo.favs.data.entities.FlightGroup;
 import com.rumbo.favs.data.entities.InfantPrice;
+import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**
  * Main fare interface
@@ -33,44 +31,21 @@ import com.rumbo.favs.data.entities.InfantPrice;
  */
 public class FarePriceImpl implements IFarePrice{
 	
-	//DAOS to use
-	
-	private IApplicationConfigurationByPassengerTypeDao appliConfigDao;
-	
 	private IPassengerDiscountDao discountByPassengerTypeDao;
 	
 	private IDepartureDateDao daysToDepartureDateDao;
 	
 	private IInfantPriceDao infantPricesDao;	
 
-	private String active = "1";
-	
-	public FarePriceImpl(){
-		super();
-	}
-	
-	public FarePriceImpl(IApplicationConfigurationByPassengerTypeDao appliConfigDao,
-							IDepartureDateDao daysToDepartureDateDao,
-							IPassengerDiscountDao discountByPassengerTypeDao,
-							IInfantPriceDao infantPricesDao){
-		super();
-		this.appliConfigDao = appliConfigDao;
-		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
-		this.daysToDepartureDateDao = daysToDepartureDateDao;
-		this.infantPricesDao = infantPricesDao;
-	}
-
 	/**
 	 * Return price's breakdown
 	 * 
 	 * @return List<FlightResult> flightResultList
 	 * */
-	public List<FlightResult> fare(SearchCriteria searchCriteria, FlightGroup flights){
+	/*public List<FlightResult> fare(SearchCriteria searchCriteria, List<Flight> flights){
 		
 		List<FlightResult> flightResultList = new ArrayList<>();
-		
-		// Iterate all possible flights
-		for (Flight flight : flights.getFlightGroup()){			
+		for (Flight flight : flights){			
 			FlightResult flightResult = getFlightResult(searchCriteria, flight);
 			if (flightResult != null){
 				flightResultList.add(flightResult);
@@ -78,27 +53,24 @@ public class FarePriceImpl implements IFarePrice{
 		}
 		
 		return flightResultList;
-	}
+	}*/
 	
 	/**
-	 * Calculate fare result by fight from search criteria
+	 * Calculate fare result by flight from search criteria
 	 * 
 	 * @param searchCriteria
 	 * @param flight
 	 * @return FlightResult
 	 */
-	private FlightResult getFlightResult(SearchCriteria searchCriteria, Flight flight){
+	public FlightResult getFlightResult(SearchCriteria searchCriteria, Flight flight){
 		
 		String flightNumber = flight.getAirline();
 		String airLine = getAirline(flight);		
-		Float basePrice = Float.parseFloat(flight.getBasePrice());	
+		Float basePrice = flight.getBasePrice();	
 		Float totalAmount = 0f;
 		
-		List<TravellerPrice> travellerPriceList = getTravellerPriceList(airLine, basePrice, searchCriteria);
-				
-		if (travellerPriceList != null && travellerPriceList.size() > 0){
-			totalAmount = getTotalAmountByFlight(travellerPriceList);	
-		}
+		List<TravellerPrice> travellerPriceList = getTravellerPriceList(airLine, basePrice, searchCriteria);				
+		totalAmount = getTotalAmountByFlight(travellerPriceList);	
 		
 		return new FlightResult(flightNumber, totalAmount, travellerPriceList);		
 	}
@@ -113,11 +85,20 @@ public class FarePriceImpl implements IFarePrice{
 			
 		float totalAmount = 0f;
 		
-		for (TravellerPrice travellerPrice: travellerPriceList){
-			totalAmount += travellerPrice.getTotalAmount();
-		}
+		if (travellerPriceList != null){
+			for (TravellerPrice travellerPrice: travellerPriceList){
+				totalAmount += travellerPrice.getTotalAmount();
+			}
+		}				
 		
-		return totalAmount;
+		return precision(2,totalAmount);
+	}
+	
+	private float precision(int decimalPlace, float d) {
+
+	    BigDecimal bd = new BigDecimal(Float.toString(d));
+	    bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+	    return bd.floatValue();
 	}
 	
 	/**
@@ -136,36 +117,32 @@ public class FarePriceImpl implements IFarePrice{
 	 * 
 	 * @return List<TravellerPrice> travellerPriceList 
 	 * */
-	private List<TravellerPrice> getTravellerPriceList(String airline, Float basePrice, SearchCriteria searchCriteria){
+	private List<TravellerPrice> getTravellerPriceList(String airline, float basePrice, SearchCriteria searchCriteria){
 		
 		List<TravellerPrice> travellerPriceList = new ArrayList<>();
+		float basePriceAux = basePrice;
 		
 		// Iterate for each passenger type
 		for (Map.Entry<PassengerType, Integer> entry : searchCriteria.getPassengers().entrySet()) {
+
+			boolean applyDateDiscount = true;
 			PassengerType passengerType = entry.getKey();
-			Integer num = entry.getValue();
+			Integer numPassengers = entry.getValue();
 			
 			// Exist this passenger type
-			if(num > 0){
-				// Get a base price type from application configuration for a passenger type
-				// I am trying a generic solution			
-				ApplicationConfigurationByPassengerType applicationConfigurationByPassengerType = 
-						appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.INFANTBASEPRICE);
-				// If apply a reduce fare set base price new value
-				// else airline fare is ok
-				if (applicationConfigurationByPassengerType != null){
-					if (active.equals(applicationConfigurationByPassengerType.getStatus()) &&
-							active.equals(applicationConfigurationByPassengerType.getPropertyValuByPassengerTypepassengerType(passengerType))){
-						// Get reduce fare (infant base price)					
-						InfantPrice infantPrice = infantPricesDao.getInfantPriceByAirline(airline);
-						
-						if (infantPrice != null && infantPrice.getPrice() != null && !infantPrice.getPrice().isEmpty()){
-							basePrice = Float.parseFloat(infantPrice.getPrice());
-						}
-					}					
+			if(numPassengers > 0){	
+				if (passengerType.equals(PassengerType.INF)){
+					applyDateDiscount = false;
+					InfantPrice infantPrice = infantPricesDao.getInfantPriceByAirline(airline);
+					
+					if (infantPrice != null){
+						basePriceAux = infantPrice.getPrice();
+					}
 				}
+				
 				travellerPriceList.add(
-						new TravellerPrice(passengerType, num, getBreakDownPrice(airline, passengerType, basePrice, searchCriteria.getDaysToDeparture())));			
+						new TravellerPrice(passengerType, numPassengers, getBreakDownPrice(airline, passengerType, basePriceAux, searchCriteria.getDaysToDeparture(),applyDateDiscount)));
+				basePriceAux = basePrice;
 			}
 		}	
 		
@@ -197,22 +174,39 @@ public class FarePriceImpl implements IFarePrice{
 		
 		if (travellerPrice != null && travellerPrice.getNumber() > 0){
 			
-			float amount = 0;
+			float amount = 0;		
 			
-			//If has date departure discount
-			if(travellerPrice.getBreakDownPrice().getDateDiscount() > 0){
-				amount = (float) (travellerPrice.getBreakDownPrice().getDateDiscount() * travellerPrice.getBreakDownPrice().getBasePrice()) / 100;
-			}else{
-				amount = travellerPrice.getBreakDownPrice().getBasePrice();
-			}
-			
-			//If has passenger discount
-			if (travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
-				amount =  (float) ((100 - travellerPrice.getBreakDownPrice().getPassengerDiscount()) * amount) / 100;
-			}
-			
+			amount = applyDiscount(travellerPrice);			
 			travellerPrice.setTotalAmount(amount * travellerPrice.getNumber());
 		}
+	}
+	
+	private float applyDiscount(TravellerPrice travellerPrice){
+		
+		float amount = 0;
+		
+		if (travellerPrice != null){
+			amount = getAmountDepDiscount(travellerPrice);			
+			amount = getAmountPaxDiscount(travellerPrice,amount);
+		}			
+		return amount;
+	}
+	
+	private float getAmountDepDiscount (TravellerPrice travellerPrice){
+
+		if (travellerPrice != null && travellerPrice.getBreakDownPrice() != null && travellerPrice.getBreakDownPrice().getDateDiscount() > 0){
+				return (float) (travellerPrice.getBreakDownPrice().getDateDiscount() * travellerPrice.getBreakDownPrice().getBasePrice()) / 100;
+		}else{
+			return travellerPrice.getBreakDownPrice().getBasePrice();
+		}	
+	}
+	
+	private float getAmountPaxDiscount (TravellerPrice travellerPrice, float amount){
+
+		if (travellerPrice != null && travellerPrice.getBreakDownPrice() != null && travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
+			return (float) ((100 - travellerPrice.getBreakDownPrice().getPassengerDiscount()) * amount) / 100;
+		}
+		return amount;
 	}
 	
 	/**
@@ -221,48 +215,57 @@ public class FarePriceImpl implements IFarePrice{
 	 * 
 	 * @return BreakDownPrice breakDownPrice 
 	 * */
-	private BreakDownPrice getBreakDownPrice(String airline, PassengerType passengerType, Float basePrice, int daysToDeparture){
+	private BreakDownPrice getBreakDownPrice(String airline, PassengerType passengerType, Float basePrice, int daysToDeparture, boolean applyDateDiscount){
 		
-		float passengerDiscount = 0;
+		float passengerTypediscount = 0;
 		float dateDiscount = 0; 
-		
-		// Days to departure date discount
-		ApplicationConfigurationByPassengerType applicationConfigurationByPassengerType = 
-				appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.DAYSTODEPARTUREDATE);	
-		
-		//Active discount && apply discount for this passenger type
-		if (applicationConfigurationByPassengerType != null){
-			if (active.equals(applicationConfigurationByPassengerType.getStatus()) &&
-					active.equals(applicationConfigurationByPassengerType.getPropertyValuByPassengerTypepassengerType(passengerType))){
+			
+		dateDiscount = applyDateDiscount ? getDateDiscount(daysToDeparture,passengerType) : 0;
+		passengerTypediscount = getPassengerDiscount(passengerType);	
 				
-				// Get info discount
-				DepartureDate daysToDepartureDate = daysToDepartureDateDao.getDiscountPercent(daysToDeparture);
-				
-				if(daysToDepartureDate != null && !daysToDepartureDate.getDiscountPercent().isEmpty()){
-					dateDiscount = Float.parseFloat(daysToDepartureDate.getDiscountPercent());
-				}				
-			}
+		return new BreakDownPrice(basePrice, passengerTypediscount, dateDiscount);
+	}
+	
+	private float getDateDiscount(int daysToDeparture, PassengerType passengerType){
+		
+		DepartureDate departureDate = daysToDepartureDateDao.getDiscount(daysToDeparture);		
+		if (departureDate != null){
+			return departureDate.getDiscount();
 		}
+		return 0;
+	}
+	
+	private float getPassengerDiscount(PassengerType passengerType){
 		
-		// Discount by passenger type
-		applicationConfigurationByPassengerType = 
-				appliConfigDao.getApplicationConfigurationByName(ApplicationConfigurationType.DISCOUNTBYPASSENERTYPE);		
-		
-		//Active discount && apply discount for this passenger type
-		if (applicationConfigurationByPassengerType != null){
-			if (active.equals(applicationConfigurationByPassengerType.getStatus()) &&
-					active.equals(applicationConfigurationByPassengerType.getPropertyValuByPassengerTypepassengerType(passengerType))){
-				
-				// Get info discount
-				PassengerDiscount discountByPassengerType = discountByPassengerTypeDao.getDiscountPercent(passengerType);
-				
-				if(discountByPassengerType != null && !discountByPassengerType.getDiscountPercent().isEmpty()){
-					passengerDiscount = Float.parseFloat(discountByPassengerType.getDiscountPercent());
-				}	
-			}
+		PassengerDiscount passengerDiscount = discountByPassengerTypeDao.getDiscount(passengerType);		
+		if (passengerDiscount != null){
+			return passengerDiscount.getDiscount();
 		}
-				
-		return new BreakDownPrice(basePrice, passengerDiscount, dateDiscount);
+		return 0;
+	}
+
+	public IPassengerDiscountDao getDiscountByPassengerTypeDao() {
+		return discountByPassengerTypeDao;
+	}
+
+	public void setDiscountByPassengerTypeDao(IPassengerDiscountDao discountByPassengerTypeDao) {
+		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
+	}
+
+	public IDepartureDateDao getDaysToDepartureDateDao() {
+		return daysToDepartureDateDao;
+	}
+
+	public void setDaysToDepartureDateDao(IDepartureDateDao daysToDepartureDateDao) {
+		this.daysToDepartureDateDao = daysToDepartureDateDao;
+	}
+
+	public IInfantPriceDao getInfantPricesDao() {
+		return infantPricesDao;
+	}
+
+	public void setInfantPricesDao(IInfantPriceDao infantPricesDao) {
+		this.infantPricesDao = infantPricesDao;
 	}
 		
 }

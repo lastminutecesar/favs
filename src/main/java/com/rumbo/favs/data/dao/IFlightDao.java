@@ -2,6 +2,7 @@ package com.rumbo.favs.data.dao;
 
 import java.util.List;
 
+import com.rumbo.favs.business.bean.search.Itinerary;
 import com.rumbo.favs.data.entities.Flight;
 
 /**
@@ -26,6 +27,6 @@ public interface IFlightDao {
 	 * @param String destination
 	 * @return FlightGroup
 	 */
-	public List<Flight> getFlightsByItinerary(String origin, String destination);
+	public List<Flight> getFlightsByItinerary(Itinerary itinerary);
 	
 }

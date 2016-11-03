@@ -12,13 +12,9 @@ import java.util.Properties;
  * @version 1.0
  * @since   2016-10-07 
  */
-public class ManageProperties {
+public class Message {
 
-	private final String MESSAGES_PROPERTIES = "messages.properties";	
-	private final String CONFIG_PROPERTIES = "config.properties";
-	private final String FILE_PROPERTIES = "files.properties";
-		
-	public static final String CSV_FILE_RESOURCE_FOLDER = "csvFileResourceFolder";
+	private static final String MESSAGES_PROPERTIES = "messages.properties";	
 	
 	/**
 	 * Get message from message property properties
@@ -32,28 +28,6 @@ public class ManageProperties {
 	}
 	
 	/**
-	 * Get property from config properties
-	 * 
-	 * @param property
-	 * @return String
-	 */
-	public String getConfigProperty(String property){
-		
-		return getProperty(property, CONFIG_PROPERTIES);
-	}
-	
-	/**
-	 * Get property from file properties
-	 * 
-	 * @param property
-	 * @return String
-	 */
-	public String getFilesProperty(String property){
-		
-		return getProperty(property, FILE_PROPERTIES);
-	}
-		
-	/**
 	 * Get a property from file
 	 * 
 	 * Can't be static method because
@@ -64,19 +38,16 @@ public class ManageProperties {
 	 * @return String 
 	 */
 	private String getProperty(String property, String file){
-		
-		Properties prop = new Properties();		
+			
 		InputStream input = null;
 		
 		try {
-			//Get file from resources folder
+			Properties prop = new Properties();
 			ClassLoader classLoader = getClass().getClassLoader();
 			input = new FileInputStream(classLoader.getResource(file).getFile());
 
 			if (input != null){
-				// Load a properties file
 				prop.load(input);
-				// Get properties value
 				return prop.getProperty(property);
 			}		
 		} catch (IOException ex) {
@@ -89,8 +60,7 @@ public class ManageProperties {
 					e.printStackTrace();
 				}
 			}
-		}
-		
+		}		
 		return null;
 	}
 	
