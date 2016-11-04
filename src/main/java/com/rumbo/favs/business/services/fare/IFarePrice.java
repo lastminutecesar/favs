@@ -25,11 +25,5 @@ public interface IFarePrice {
 	 * 
 	 * */
 	public FlightResult getFlightResult(SearchCriteria searchCriteria, Flight flights);	
-
-	public void setDiscountByPassengerTypeDao(IPassengerDiscountDao discountByPassengerTypeDao);
-
-	public void setDaysToDepartureDateDao(IDepartureDateDao daysToDepartureDateDao);
-
-	public void setInfantPricesDao(IInfantPriceDao infantPricesDao);
 	
 }

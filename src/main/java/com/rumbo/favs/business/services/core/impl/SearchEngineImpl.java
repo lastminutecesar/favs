@@ -31,6 +31,12 @@ public class SearchEngineImpl implements ISearchEngine{
 		message = new Message();
 	}
 
+	public SearchEngineImpl(IFlightDao flightDao, IFarePrice farePrice) {
+		message = new Message();
+		this.flightDao = flightDao;
+		this.farePrice = farePrice;
+	}
+
 	/**
 	 * Get a search response from search criteria
 	 * 
@@ -40,31 +46,23 @@ public class SearchEngineImpl implements ISearchEngine{
 	public AvailabilityResult search(SearchCriteria searchCriteria) throws SearchCriteriaException{
 		
 		try{
-			{
-				List<Flight> flights = flightDao.getFlightsByItinerary(searchCriteria.getItinerary());
-				List<FlightResult> flightResultList = new ArrayList<>();
-				
-				// Exist flight combination
-				if (flights != null){
-					for(Flight flight : flights){
-						FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
-						if(flightResult != null){
-							flightResultList.add(flightResult);
-						}
-					}					
-					
-					if (!flightResultList.isEmpty()){
-						return createAvailabilityResult(ResultType.OK, flightResultList);
-					}else{
-						return createAvailabilityResult(ResultType.KO, null);
-					}
-				}else{
-					// No exist flight combination
-					return createAvailabilityResult(ResultType.KO, null);
+			List<Flight> flights = flightDao.getFlightsByItinerary(searchCriteria.getItinerary());
+			List<FlightResult> flightResultList = new ArrayList<>();
+			
+			for(Flight flight : flights){
+				FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
+				if(flightResult != null){
+					flightResultList.add(flightResult);
 				}
+			}					
+			
+			if (!flightResultList.isEmpty()){
+				return createAvailabilityResult(ResultType.OK, flightResultList);
+			}else{
+				return createAvailabilityResult(ResultType.KO, null);
 			}
-		}catch(SearchCriteriaException sce){
-			throw sce;
+		}catch(SearchCriteriaException e){
+			throw e;
 		}		
 	}
 	
@@ -84,14 +82,6 @@ public class SearchEngineImpl implements ISearchEngine{
 		availabilityResult.setFlightResultList(flightResultList);
 		
 		return availabilityResult;
-	}
-
-	public void setFlightDao(IFlightDao flightDao) {
-		this.flightDao = flightDao;
-	}
-
-	public void setFarePrice(IFarePrice farePrice) {
-		this.farePrice = farePrice;
 	}
 	
 }

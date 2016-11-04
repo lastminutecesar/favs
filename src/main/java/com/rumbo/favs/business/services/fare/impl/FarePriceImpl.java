@@ -5,16 +5,24 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.BreakDownPrice;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.result.TravellerPrice;
+import com.rumbo.favs.business.bean.search.Itinerary;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
+import com.rumbo.favs.business.bean.search.SearchCriteria.Builder;
 import com.rumbo.favs.business.services.fare.IFarePrice;
+import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.dao.IDepartureDateDao;
 import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
+import com.rumbo.favs.data.dao.impl.DepartureDateDaoImpl;
+import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
+import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
 import com.rumbo.favs.data.entities.DepartureDate;
 import com.rumbo.favs.data.entities.Flight;
 import com.rumbo.favs.data.entities.InfantPrice;
@@ -36,25 +44,18 @@ public class FarePriceImpl implements IFarePrice{
 	private IDepartureDateDao daysToDepartureDateDao;
 	
 	private IInfantPriceDao infantPricesDao;	
-
-	/**
-	 * Return price's breakdown
-	 * 
-	 * @return List<FlightResult> flightResultList
-	 * */
-	/*public List<FlightResult> fare(SearchCriteria searchCriteria, List<Flight> flights){
 		
-		List<FlightResult> flightResultList = new ArrayList<>();
-		for (Flight flight : flights){			
-			FlightResult flightResult = getFlightResult(searchCriteria, flight);
-			if (flightResult != null){
-				flightResultList.add(flightResult);
-			}			
-		}
+	public FarePriceImpl() {
 		
-		return flightResultList;
-	}*/
+	}
 	
+	public FarePriceImpl(IPassengerDiscountDao discountByPassengerTypeDao, IDepartureDateDao daysToDepartureDateDao,
+			IInfantPriceDao infantPricesDao) {
+		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
+		this.daysToDepartureDateDao = daysToDepartureDateDao;
+		this.infantPricesDao = infantPricesDao;
+	}
+
 	/**
 	 * Calculate fare result by flight from search criteria
 	 * 
@@ -243,29 +244,5 @@ public class FarePriceImpl implements IFarePrice{
 		}
 		return 0;
 	}
-
-	public IPassengerDiscountDao getDiscountByPassengerTypeDao() {
-		return discountByPassengerTypeDao;
-	}
-
-	public void setDiscountByPassengerTypeDao(IPassengerDiscountDao discountByPassengerTypeDao) {
-		this.discountByPassengerTypeDao = discountByPassengerTypeDao;
-	}
-
-	public IDepartureDateDao getDaysToDepartureDateDao() {
-		return daysToDepartureDateDao;
-	}
-
-	public void setDaysToDepartureDateDao(IDepartureDateDao daysToDepartureDateDao) {
-		this.daysToDepartureDateDao = daysToDepartureDateDao;
-	}
-
-	public IInfantPriceDao getInfantPricesDao() {
-		return infantPricesDao;
-	}
-
-	public void setInfantPricesDao(IInfantPriceDao infantPricesDao) {
-		this.infantPricesDao = infantPricesDao;
-	}
-		
+	
 }

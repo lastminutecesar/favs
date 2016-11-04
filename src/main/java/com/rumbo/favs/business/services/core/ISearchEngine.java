@@ -15,12 +15,7 @@ public interface ISearchEngine {
 
 	/**
 	 * 
-	 * @param origin
-	 * @param destination
-	 * @param daysToDeparture
-	 * @param numAdult
-	 * @param numChild
-	 * @param numInfant
+	 * @param searchCriteria
 	 * @return search result
 	 * @throws SearchCriteriaException
 	 */

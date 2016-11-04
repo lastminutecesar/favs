@@ -21,10 +21,6 @@ import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
 import com.rumbo.favs.data.entities.Flight;
 
 public class FarePriceImplTest {
-	
-	private final String DUMMY_AIRPORT = "MAD";
-	private final int DUMMY_DAYS = 5;
-	private final int DUMMY_NUM_PASSENGERS = 1;
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();	
@@ -54,10 +50,9 @@ public class FarePriceImplTest {
 				.withBasePrice(260)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -93,11 +88,10 @@ public class FarePriceImplTest {
 				.withBasePrice(171)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
-		
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
+											
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
 		
@@ -132,10 +126,9 @@ public class FarePriceImplTest {
 				.withBasePrice(250)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -171,10 +164,9 @@ public class FarePriceImplTest {
 				.withBasePrice(148)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -210,10 +202,9 @@ public class FarePriceImplTest {
 				.withBasePrice(148)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -250,10 +241,9 @@ public class FarePriceImplTest {
 							.withBasePrice(197)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -290,10 +280,9 @@ public class FarePriceImplTest {
 							.withBasePrice(248)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+													new DepartureDateDaoImpl(),
+													new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -330,10 +319,9 @@ public class FarePriceImplTest {
 							.withBasePrice(113)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl();
-		farePrice.setDaysToDepartureDateDao(new DepartureDateDaoImpl());
-		farePrice.setDiscountByPassengerTypeDao(new PassengerDiscountDaoImpl());
-		farePrice.setInfantPricesDao(new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
+				new DepartureDateDaoImpl(),
+				new InfantPriceDaoImpl());
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
