@@ -1,4 +1,4 @@
-package com.rumbo.favs.data.utilities;
+package com.rumbo.favs.utilities;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

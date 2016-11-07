@@ -12,7 +12,7 @@ import com.rumbo.favs.business.services.core.ISearchEngine;
 import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.data.dao.IFlightDao;
 import com.rumbo.favs.data.entities.Flight;
-import com.rumbo.favs.data.utilities.Message;
+import com.rumbo.favs.utilities.Message;
 
 /**
  * Main business class
@@ -56,26 +56,27 @@ public class SearchEngineImpl implements ISearchEngine{
 				}
 			}					
 			
-			if (!flightResultList.isEmpty()){
-				return createAvailabilityResult(ResultType.OK, flightResultList);
-			}else{
-				return createAvailabilityResult(ResultType.KO, null);
-			}
+			return getResult(flightResultList);
+			
 		}catch(SearchCriteriaException e){
 			throw e;
 		}		
 	}
-	
+		
 	/**
 	 * Create a response from a search result
 	 * 
-	 * @param resultType
 	 * @param flightResultList
 	 * @return AvailabilityResult search result
 	 */
-	private AvailabilityResult createAvailabilityResult(ResultType resultType, List<FlightResult> flightResultList){
+	private AvailabilityResult getResult(List<FlightResult> flightResultList){
 		
 		AvailabilityResult availabilityResult = new AvailabilityResult();
+		ResultType resultType = ResultType.OK;
+		
+		if (flightResultList == null || flightResultList.isEmpty()){
+			resultType = ResultType.KO;
+		}
 		
 		availabilityResult.setResult(resultType);
 		availabilityResult.setDescription(message.getMessageProperty(resultType.toString()));
