@@ -28,7 +28,7 @@ import com.rumbo.favs.data.dao.impl.DepartureDateDaoImpl;
 import com.rumbo.favs.data.dao.impl.FlightDaoImpl;
 import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
 import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
-import com.rumbo.favs.data.utilities.MyMath;
+import com.rumbo.favs.utilities.MyMath;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SearchTest {

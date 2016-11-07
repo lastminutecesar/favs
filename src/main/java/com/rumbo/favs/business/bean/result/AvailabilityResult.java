@@ -3,7 +3,7 @@ package com.rumbo.favs.business.bean.result;
 import java.util.List;
 
 import com.rumbo.favs.business.enums.result.ResultType;
-import com.rumbo.favs.data.utilities.MyMath;
+import com.rumbo.favs.utilities.MyMath;
 
 /**
  * Represents search result
