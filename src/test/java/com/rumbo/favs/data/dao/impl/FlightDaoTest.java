@@ -22,29 +22,47 @@ public class FlightDaoTest {
 	@BeforeClass
 	public static void initialize()
 	{
+		// GIVEN
 		flightDao = new FlightDaoImpl();
 	}
 
 	@Test		
 	public void testA() {
 		
+		// WHEN
 		List<Flight> flights = flightDao.getFlightsByItinerary(Itinerary.builder()
-													.withDepartureAirport("AMS")
-													.withArrivalAirport("FRA")
-													.build());
+																.withDepartureAirport("AMS")
+																.withArrivalAirport("FRA")
+																.build());
 		
+		// THEN
 		assertThat(flights.size(),is(3));
 	}
 	
 	@Test		
 	public void testB() {
 		
+		// WHEN
 		List<Flight> flights = flightDao.getFlightsByItinerary(Itinerary.builder()
-													.withDepartureAirport("LHR")
-													.withArrivalAirport("IST")
-													.build());
-											
+																.withDepartureAirport("LHR")
+																.withArrivalAirport("IST")
+																.build());
+		
+		// THEN
 		assertThat(flights.size(),is(2));
+	}
+	
+	@Test		
+	public void testC() {
+		
+		// WHEN
+		List<Flight> flights = flightDao.getFlightsByItinerary(Itinerary.builder()
+																.withDepartureAirport("AMS")
+																.withArrivalAirport("MAD")
+																.build());
+			
+		// THEN
+		assertThat(flights.size(),is(0));
 	}
 	
 }

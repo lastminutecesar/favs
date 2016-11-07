@@ -10,10 +10,6 @@ import com.rumbo.favs.data.entities.Airport;
  * Airport DAO Impl
  * Manage departure and arrival cities
  * 
- * This implimentation works with csv files
- * and turn the information into dom object
- * to let launch queries
- * 
  * @author  ccabrerizo
  * @version 1.0
  * @since   2016-10-07 

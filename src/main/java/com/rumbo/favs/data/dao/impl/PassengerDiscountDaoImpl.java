@@ -16,10 +16,6 @@ import com.rumbo.favs.data.entities.PassengerDiscount;
  * DiscountByPassengerType DAO
  * Manage discount by passenger type
  * 
- * This implimentation works with csv files
- * and turn the information into dom object
- * to let launch queries
- * 
  * @author  ccabrerizo
  * @version 1.0
  * @since   2016-10-07 

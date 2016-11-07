@@ -3,43 +3,51 @@ package com.rumbo.favs.data.dao.impl;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.rumbo.favs.business.bean.PassengerType;
-import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
-import com.rumbo.favs.data.entities.InfantPrice;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 
 public class PassengerTypeDaoTest {
+	
+	private static IPassengerDiscountDao passengerDiscountDao;
+	
+	@BeforeClass
+	public static void initialize()
+	{
+		// GIVEN
+		passengerDiscountDao = new PassengerDiscountDaoImpl();
+	}
 
 	@Test		
 	public void testA() {
 		
-		IPassengerDiscountDao passengerDiscountDao = new PassengerDiscountDaoImpl();
-		
+		// WHEN
 		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.ADT);
 		
+		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(0f));
 	}
 	
 	@Test		
 	public void testB() {
 		
-		IPassengerDiscountDao passengerDiscountDao = new PassengerDiscountDaoImpl();
-		
+		// WHEN
 		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.CHD);
 		
+		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(33f));
 	}
 	
 	@Test		
 	public void testC() {
 		
-		IPassengerDiscountDao passengerDiscountDao = new PassengerDiscountDaoImpl();
-		
+		// WHEN
 		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.INF);
 		
+		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(0f));
 	}
 	

@@ -8,7 +8,7 @@ import java.io.IOException;
 public abstract class GenericDao {
 
 	/**
-	 * From csvFile turn the information into dom object
+	 * Read csv file
 	 * 
 	 * @param csvFile
 	 */

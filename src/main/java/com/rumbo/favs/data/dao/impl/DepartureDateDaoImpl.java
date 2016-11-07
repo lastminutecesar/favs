@@ -1,9 +1,5 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +9,7 @@ import com.rumbo.favs.data.entities.DepartureDate;
 /**
  * DaysToDepartureDate DAO
  * Manage days to departure date discount
- * 
- * This implimentation works with csv files
- * and turn the information into dom object
- * to let launch queries
- * 
+ 
  * @author  ccabrerizo
  * @version 1.0
  * @since   2016-10-07 
