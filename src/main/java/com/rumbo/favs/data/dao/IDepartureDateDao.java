@@ -11,10 +11,6 @@ import com.rumbo.favs.data.entities.DepartureDate;
  * @since   2016-10-07 
  */
 public interface IDepartureDateDao {
-
-	public static final String MIN = "min";
-	public static final String MAX = "max";
-	public static final String DISCOUNTPERCENT = "discountPercent";
 	
 	/**
 	 * Get days to departure date 

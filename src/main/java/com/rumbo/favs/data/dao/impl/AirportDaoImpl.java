@@ -16,8 +16,7 @@ import com.rumbo.favs.data.entities.Airport;
  */
 public class AirportDaoImpl extends GenericDao implements IAirportDao{
 	
-	private final String AIRPORTS_FILE = "src/main/resources/files/airports.csv";
-	
+	private final String AIRPORTS_FILE = "airports.csv";	
 	private Map<String,String> airports = new HashMap<>();
 	
 	public AirportDaoImpl(){

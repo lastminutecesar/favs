@@ -14,14 +14,9 @@ import com.rumbo.favs.utilities.MyMath;
  */
 public class AvailabilityResult {
 
-	// Search result
 	private ResultType result;
-	
-	// Search message
 	private String description;
-	
-	// List of possible flights for the itinerary
-	List<FlightResult> flightResultList;
+	private List<FlightResult> flightResultList;
 
 	public ResultType getResult() {
 		return result;
@@ -42,9 +37,7 @@ public class AvailabilityResult {
 		
 		if (result.equals(ResultType.KO)){
 			return description;
-		}
-		
-		if (result.equals(ResultType.OK)){
+		}else{
 			StringBuffer response = new StringBuffer();
 			
 			// Iterate searched flights
@@ -58,8 +51,6 @@ public class AvailabilityResult {
 			
 			return response.toString();
 		}
-		
-		return "AvailabilityResult [result=" + result + ", description=" + description + ", flightResultList=" + flightResultList + "]";
 	}
 
 	/**
@@ -74,8 +65,7 @@ public class AvailabilityResult {
 		StringBuffer responseAux = new StringBuffer();	
 		String parenthesisOpen = "(";
 		String parenthesisClose = ")";
-		String plus = " + ";
-		
+		String plus = " + ";		
 		boolean firstTime = true;		
 		
 		responseAux.append(parenthesisOpen);
@@ -92,7 +82,6 @@ public class AvailabilityResult {
 		}
 		
 		responseAux.append(parenthesisClose);		
-		
 		response.append(responseAux);
 		
 		return response;
@@ -125,7 +114,7 @@ public class AvailabilityResult {
 				}
 			}
 			
-			//If has passenger discount
+			// If has passenger discount
 			if(travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
 				response.append(MyMath.getRoundedFloat(hundred - travellerPrice.getBreakDownPrice().getPassengerDiscount())).
 				append(percent).append(space).append(of).append(space).append(parenthesisOpen);
@@ -145,7 +134,7 @@ public class AvailabilityResult {
 				response.append(parenthesisClose);
 			}
 			
-			//If has passenger discount
+			// If has passenger discount
 			if(travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
 				response.append(parenthesisClose);
 			}
@@ -164,8 +153,7 @@ public class AvailabilityResult {
 	 */
 	private boolean hasDiscount(BreakDownPrice breakDownPrice){
 		
-		return breakDownPrice.getDateDiscount() > 0 || breakDownPrice.getPassengerDiscount() > 0;
-		
+		return breakDownPrice.getDateDiscount() > 0 || breakDownPrice.getPassengerDiscount() > 0;		
 	}	
 	
 	public void setResult(ResultType result) {
@@ -186,16 +174,6 @@ public class AvailabilityResult {
 	
 	public void setFlightResultList(List<FlightResult> flightResultList) {
 		this.flightResultList = flightResultList;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((flightResultList == null) ? 0 : flightResultList.hashCode());
-		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
-		return result;
-	}
+	}	
 	
 }

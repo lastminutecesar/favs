@@ -11,9 +11,6 @@ import com.rumbo.favs.data.entities.Airport;
  * @since   2016-10-07 
  */
 public interface IAirportDao {
-
-	public static final String IATACODE = "iataCode";
-	public static final String CITY = "city";
 	
 	/**
 	 * Get airport by city iata code

@@ -8,9 +8,6 @@ import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;
-import com.rumbo.favs.data.entities.Flight;
-import com.rumbo.favs.data.entities.Flight.Builder;
-
 
 /**
  * Flight Search Criteria
@@ -67,7 +64,7 @@ public class SearchCriteria {
 		 
 		 if (daysToDeparture < MIN_DAYSTODEPARTURE || daysToDeparture > MAX_DAYSTODEPARTURE){
 				throw new SearchCriteriaException(SearchCriteriaException.ERROR_DEPARTURE_DATE);
-			}
+		 }
 	 }
 	
 	 private void validatePassengers(Map<PassengerType,Integer> passengers) throws SearchCriteriaException{
@@ -190,6 +187,5 @@ public class SearchCriteria {
 	        return passengers;
 	    }		
 	}
-
 	
 }

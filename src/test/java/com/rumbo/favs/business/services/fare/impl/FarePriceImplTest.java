@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,16 +15,41 @@ import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.search.Itinerary;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
 import com.rumbo.favs.business.services.fare.IFarePrice;
+import com.rumbo.favs.data.dao.IAirportDao;
+import com.rumbo.favs.data.dao.IDepartureDateDao;
+import com.rumbo.favs.data.dao.IInfantPriceDao;
+import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.dao.impl.AirportDaoImpl;
-import com.rumbo.favs.data.dao.impl.DepartureDateDaoImpl;
-import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
-import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
+import com.rumbo.favs.data.dao.mock.impl.DepartureDateDaoMock;
+import com.rumbo.favs.data.dao.mock.impl.InfantPriceDaoMock;
+import com.rumbo.favs.data.dao.mock.impl.PassengerDiscountDaoMock;
 import com.rumbo.favs.data.entities.Flight;
 
 public class FarePriceImplTest {
 
+	private static IAirportDao airportDao;
+	private static IDepartureDateDao departureDateDao;
+	private static IInfantPriceDao infantPriceDao;
+	private static IPassengerDiscountDao passengerDiscountDao;
+	
+	
 	@Rule
     public ExpectedException thrown = ExpectedException.none();	
+	
+	@BeforeClass
+	public static void initialize()
+	{
+		// GIVEN
+		/*airportDao = new AirportDaoImpl();
+		departureDateDao = new DepartureDateDaoImpl();
+		infantPriceDao = new InfantPriceDaoImpl();
+		passengerDiscountDao = new PassengerDiscountDaoImpl();*/
+		
+		airportDao = new AirportDaoImpl();
+		departureDateDao = new DepartureDateDaoMock();
+		infantPriceDao = new InfantPriceDaoMock();
+		passengerDiscountDao = new PassengerDiscountDaoMock();
+	}
 		
 	@Test		
 	public void testA() {			    
@@ -41,7 +67,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.CHD, 2)
 									.withPassenger(PassengerType.INF, 2)
 									.build())
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -50,9 +76,9 @@ public class FarePriceImplTest {
 				.withBasePrice(260)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -79,7 +105,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.CHD, 3)
 									.withPassenger(PassengerType.INF, 3)
 									.build())
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -88,9 +114,9 @@ public class FarePriceImplTest {
 				.withBasePrice(171)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 											
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -117,7 +143,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.CHD, 1)
 									.withPassenger(PassengerType.INF, 1)
 									.build())
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -126,9 +152,9 @@ public class FarePriceImplTest {
 				.withBasePrice(250)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -155,7 +181,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.CHD, 1)
 									.withPassenger(PassengerType.INF, 1)
 									.build())
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -164,9 +190,9 @@ public class FarePriceImplTest {
 				.withBasePrice(148)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -193,7 +219,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.CHD, 1)
 									.withPassenger(PassengerType.INF, 1)
 									.build())
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -202,9 +228,9 @@ public class FarePriceImplTest {
 				.withBasePrice(148)
 				.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -232,7 +258,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.INF, 0)
 									.build())
 
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -241,9 +267,9 @@ public class FarePriceImplTest {
 							.withBasePrice(197)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -271,7 +297,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.INF, 0)
 									.build())
 
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -280,9 +306,9 @@ public class FarePriceImplTest {
 							.withBasePrice(248)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-													new DepartureDateDaoImpl(),
-													new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+													departureDateDao,
+													infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);
@@ -310,7 +336,7 @@ public class FarePriceImplTest {
 									.withPassenger(PassengerType.INF, 0)
 									.build())
 
-				.withDao(new AirportDaoImpl())
+				.withDao(airportDao)
 				.build();
 		
 		Flight flight = Flight.builder()
@@ -319,9 +345,9 @@ public class FarePriceImplTest {
 							.withBasePrice(113)
 							.build();
 		
-		IFarePrice farePrice = new FarePriceImpl(new PassengerDiscountDaoImpl(),
-				new DepartureDateDaoImpl(),
-				new InfantPriceDaoImpl());
+		IFarePrice farePrice = new FarePriceImpl(passengerDiscountDao,
+				departureDateDao,
+				infantPriceDao);
 		
 		// WHEN
 		FlightResult flightResult = farePrice.getFlightResult(searchCriteria, flight);

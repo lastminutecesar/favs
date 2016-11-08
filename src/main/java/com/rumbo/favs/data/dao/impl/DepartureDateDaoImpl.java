@@ -16,8 +16,7 @@ import com.rumbo.favs.data.entities.DepartureDate;
  */
 public class DepartureDateDaoImpl extends GenericDao implements IDepartureDateDao{
 	
-	private final String DEPARTUREDATE_FILE = "src/main/resources/files/departureDate.csv";
-	
+	private final String DEPARTUREDATE_FILE = "departureDate.csv";	
 	private List<DepartureDate> departureDates = new ArrayList<>();
 	
 	public DepartureDateDaoImpl(){

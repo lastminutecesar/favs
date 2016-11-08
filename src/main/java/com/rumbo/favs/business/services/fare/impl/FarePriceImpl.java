@@ -1,28 +1,19 @@
 package com.rumbo.favs.business.services.fare.impl;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.rumbo.favs.business.bean.PassengerType;
-import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.BreakDownPrice;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.result.TravellerPrice;
-import com.rumbo.favs.business.bean.search.Itinerary;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.business.bean.search.SearchCriteria.Builder;
 import com.rumbo.favs.business.services.fare.IFarePrice;
-import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.dao.IDepartureDateDao;
 import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
-import com.rumbo.favs.data.dao.impl.DepartureDateDaoImpl;
-import com.rumbo.favs.data.dao.impl.InfantPriceDaoImpl;
-import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
 import com.rumbo.favs.data.entities.DepartureDate;
 import com.rumbo.favs.data.entities.Flight;
 import com.rumbo.favs.data.entities.InfantPrice;
@@ -39,14 +30,11 @@ import com.rumbo.favs.data.entities.PassengerDiscount;
  */
 public class FarePriceImpl implements IFarePrice{
 	
-	private IPassengerDiscountDao discountByPassengerTypeDao;
-	
-	private IDepartureDateDao daysToDepartureDateDao;
-	
+	private IPassengerDiscountDao discountByPassengerTypeDao;	
+	private IDepartureDateDao daysToDepartureDateDao;	
 	private IInfantPriceDao infantPricesDao;	
 		
-	public FarePriceImpl() {
-		
+	public FarePriceImpl() {		
 	}
 	
 	public FarePriceImpl(IPassengerDiscountDao discountByPassengerTypeDao, IDepartureDateDao daysToDepartureDateDao,
@@ -229,7 +217,8 @@ public class FarePriceImpl implements IFarePrice{
 	
 	private float getDateDiscount(int daysToDeparture, PassengerType passengerType){
 		
-		DepartureDate departureDate = daysToDepartureDateDao.getDiscount(daysToDeparture);		
+		DepartureDate departureDate = daysToDepartureDateDao.getDiscount(daysToDeparture);	
+		
 		if (departureDate != null){
 			return departureDate.getDiscount();
 		}
@@ -238,7 +227,8 @@ public class FarePriceImpl implements IFarePrice{
 	
 	private float getPassengerDiscount(PassengerType passengerType){
 		
-		PassengerDiscount passengerDiscount = discountByPassengerTypeDao.getDiscount(passengerType);		
+		PassengerDiscount passengerDiscount = discountByPassengerTypeDao.getDiscount(passengerType);	
+		
 		if (passengerDiscount != null){
 			return passengerDiscount.getDiscount();
 		}

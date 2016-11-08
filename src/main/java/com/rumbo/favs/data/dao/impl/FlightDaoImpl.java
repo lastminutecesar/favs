@@ -17,8 +17,7 @@ import com.rumbo.favs.data.entities.Flight;
  */
 public class FlightDaoImpl extends GenericDao implements IFlightDao {
 	
-	private final String FLIGHTS_FILE = "src/main/resources/files/flights.csv";
-	
+	private final String FLIGHTS_FILE = "flights.csv";	
 	private List<Flight> flights;
 	
 	public FlightDaoImpl(){

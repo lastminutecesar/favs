@@ -11,17 +11,15 @@ import com.rumbo.favs.business.bean.PassengerType;
  */
 public class TravellerPrice{
 
-	PassengerType type;
-	int number;
-	float totalAmount;
-	BreakDownPrice breakDownPrice;
+	private PassengerType type;
+	private int number;
+	private float totalAmount;
+	private BreakDownPrice breakDownPrice;
 		
 	public TravellerPrice() {
-		super();
 	}
 	
 	public TravellerPrice(PassengerType type, int number, BreakDownPrice breakDownPrice) {
-		super();
 		this.type = type;
 		this.number = number;
 		this.breakDownPrice = breakDownPrice;
@@ -56,17 +54,6 @@ public class TravellerPrice{
 	}
 	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
-	}
-		
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((breakDownPrice == null) ? 0 : breakDownPrice.hashCode());
-		result = prime * result + number;
-		result = prime * result + Float.floatToIntBits(totalAmount);
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
 	}
 
 	@Override

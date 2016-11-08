@@ -1,12 +1,7 @@
 package com.rumbo.favs.business.services.fare;
 
-import java.util.List;
-
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.data.dao.IDepartureDateDao;
-import com.rumbo.favs.data.dao.IInfantPriceDao;
-import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.Flight;
 
 /**

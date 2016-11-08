@@ -24,15 +24,6 @@ public class Itinerary {
 	public String getArrivalAirport() {
 		return arrivalAirport;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((arrivalAirport == null) ? 0 : arrivalAirport.hashCode());
-		result = prime * result + ((departureAirport == null) ? 0 : departureAirport.hashCode());
-		return result;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -53,6 +44,7 @@ public class Itinerary {
 				return false;
 		} else if (!departureAirport.equals(other.departureAirport))
 			return false;
+		
 		return true;
 	}
 
@@ -77,8 +69,7 @@ public class Itinerary {
 		
 		public Itinerary build(){
 			return new Itinerary(departureAirport,arrivalAirport);
-		}
-		
+		}		
 	}
 	
 }

@@ -1,8 +1,7 @@
 package com.rumbo.favs.data.entities;
 
-
 /**
- * Infant Price by Airline class to work with jaxb and dom
+ * Infant Price by Airline class
  * 
  * @author  ccabrerizo
  * @version 1.0
@@ -16,11 +15,9 @@ public class InfantPrice {
 	private float price;
 	
 	public InfantPrice() {
-		super();
 	}
 
 	public InfantPrice(String iataCode, String name, float price) {
-		super();
 		this.iataCode = iataCode;
 		this.name = name;
 		this.price = price;
@@ -48,16 +45,6 @@ public class InfantPrice {
 
 	public void setPrice(float price) {
 		this.price = price;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((iataCode == null) ? 0 : iataCode.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + Float.floatToIntBits(price);
-		return result;
 	}
 
 	@Override

@@ -11,10 +11,6 @@ import com.rumbo.favs.data.entities.InfantPrice;
  * @since   2016-10-07 
  */
 public interface IInfantPriceDao {
-
-	public static final String IATACODE = "iataCode";
-	public static final String NAME = "name";
-	public static final String PRICE = "price";
 	
 	/**
 	 * Get infant price by airline

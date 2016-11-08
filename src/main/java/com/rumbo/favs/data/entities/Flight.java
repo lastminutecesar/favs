@@ -3,7 +3,7 @@ package com.rumbo.favs.data.entities;
 import com.rumbo.favs.business.bean.search.Itinerary;
 
 /**
- * Itinerary class to work with jaxb and dom
+ * Itinerary class
  * 
  * @author  ccabrerizo
  * @version 1.0
@@ -42,16 +42,6 @@ public class Flight {
 		
 	public float getBasePrice() {
 		return basePrice;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((airline == null) ? 0 : airline.hashCode());
-		result = prime * result + Float.floatToIntBits(basePrice);
-		result = prime * result + ((itinerary == null) ? 0 : itinerary.hashCode());
-		return result;
 	}
 
 	@Override

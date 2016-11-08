@@ -1,14 +1,18 @@
 package com.rumbo.favs.business.bean.search;
 
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
+import com.rumbo.favs.data.dao.IAirportDao;
+import com.rumbo.favs.data.dao.mock.impl.AirportDaoMockImpl;
 
 public class SearchCriteriaTest {
 	
+	private static IAirportDao airportDao;
 	private final String DUMMY_AIRPORT = "MAD";
 	private final int DUMMY_DAYS = 5;
 	private final int DUMMY_NUM_PASSENGERS = 1;
@@ -19,6 +23,13 @@ public class SearchCriteriaTest {
 
 	@Rule
     public ExpectedException thrown = ExpectedException.none();	
+	
+	@BeforeClass
+	public static void initialize()
+	{
+		// GIVEN
+		airportDao = new AirportDaoMockImpl();
+	}
 	
 	@Test		
 	public void testA() {
@@ -34,7 +45,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, 0)
 									.withPassenger(PassengerType.INF, 0)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -54,7 +65,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -74,7 +85,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, -1)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -94,7 +105,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, -1)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -117,7 +128,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -140,7 +151,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -160,7 +171,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();
@@ -180,7 +191,7 @@ public class SearchCriteriaTest {
 									.withPassenger(PassengerType.CHD, DUMMY_NUM_PASSENGERS)
 									.withPassenger(PassengerType.INF, DUMMY_NUM_PASSENGERS)
 									.build())
-				.withDao(new AirportDaoMockImpl())
+				.withDao(airportDao)
 				
 				// WHEN
 				.build();

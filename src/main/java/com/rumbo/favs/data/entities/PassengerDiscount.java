@@ -5,7 +5,6 @@ import com.rumbo.favs.business.bean.PassengerType;
 
 /**
  * Discount by passenger type class 
- * to work with jaxb and dom
  * 
  * @author  ccabrerizo
  * @version 1.0
@@ -18,11 +17,9 @@ public class PassengerDiscount {
 	private float discount;
 			
 	public PassengerDiscount() {
-		super();
 	}	
 
 	public PassengerDiscount(PassengerType passengerType, float discountPercent) {
-		super();
 		this.passengerType = passengerType;
 		this.discount = discountPercent;
 	}
@@ -41,15 +38,6 @@ public class PassengerDiscount {
 
 	public void setDiscount(float discount) {
 		this.discount = discount;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(discount);
-		result = prime * result + ((passengerType == null) ? 0 : passengerType.hashCode());
-		return result;
 	}
 
 	@Override

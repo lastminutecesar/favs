@@ -15,11 +15,6 @@ import com.rumbo.favs.data.entities.Flight;
  */
 public interface IFlightDao {
 	
-	public static final String ORIGIN = "origin";
-	public static final String DESTINATION = "destination";
-	public static final String AIRLINE = "airline";
-	public static final String BASEPRICE = "basePrice";
-	
 	/**
 	 * Get FlightGroup by origin and destination
 	 * 

@@ -16,8 +16,7 @@ import com.rumbo.favs.data.entities.InfantPrice;
  */
 public class InfantPriceDaoImpl extends GenericDao implements IInfantPriceDao{
 	
-	private final String INFANTPRICES_FILE = "src/main/resources/files/infantPrices.csv";
-	
+	private final String INFANTPRICES_FILE = "infantPrices.csv";	
 	private Map<String,InfantPrice> infantPrices = new HashMap<>();
 	
 	public InfantPriceDaoImpl(){

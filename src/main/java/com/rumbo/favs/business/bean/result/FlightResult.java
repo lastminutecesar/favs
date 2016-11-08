@@ -13,16 +13,14 @@ import java.util.List;
  */
 public class FlightResult {
 
-	String flight;
-	float totalAmount = 0f;	
-	List<TravellerPrice> travellerPriceList;
+	private String flight;
+	private float totalAmount = 0f;	
+	private List<TravellerPrice> travellerPriceList;
 		
 	public FlightResult() {
-		super();
 	}
 
 	public FlightResult(String flight, float totalAmount, List<TravellerPrice> travellerPriceList) {
-		super();
 		this.flight = flight;
 		this.totalAmount = totalAmount;
 		this.travellerPriceList = travellerPriceList;
@@ -51,17 +49,7 @@ public class FlightResult {
 	public void setTotalAmount(float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((flight == null) ? 0 : flight.hashCode());
-		result = prime * result + Float.floatToIntBits(totalAmount);
-		result = prime * result + ((travellerPriceList == null) ? 0 : travellerPriceList.hashCode());
-		return result;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "FlightResult [flight=" + flight + ", totalAmount=" + totalAmount + ", travellerPriceList=" + travellerPriceList + "]";

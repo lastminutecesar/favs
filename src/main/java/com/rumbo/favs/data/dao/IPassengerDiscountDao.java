@@ -12,9 +12,6 @@ import com.rumbo.favs.data.entities.PassengerDiscount;
  * @since   2016-10-07 
  */
 public interface IPassengerDiscountDao {
-
-	public static final String PASSENGERTYPE = "passengerType";
-	public static final String DISCOUNTPERCENT = "discountPercent";
 	
 	/**
 	 * Get discount passenger type by a passenger type

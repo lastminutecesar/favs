@@ -2,7 +2,6 @@ package com.rumbo.favs.data.entities;
 
 /**
  * Days to departure date class 
- * to work with jaxb and dom
  * 
  * @author  ccabrerizo
  * @version 1.0
@@ -15,11 +14,9 @@ public class DepartureDate {
 	private float discount;
 			
 	public DepartureDate() {
-		super();
 	}
 
 	public DepartureDate(int min, int max, float discount) {
-		super();
 		this.minDay = min;
 		this.maxDay = max;
 		this.discount = discount;
@@ -47,16 +44,6 @@ public class DepartureDate {
 
 	public void setDiscount(float discount) {
 		this.discount = discount;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(discount);
-		result = prime * result + maxDay;
-		result = prime * result + minDay;
-		return result;
 	}
 
 	@Override

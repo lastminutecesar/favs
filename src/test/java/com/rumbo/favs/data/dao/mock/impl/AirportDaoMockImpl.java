@@ -1,4 +1,4 @@
-package com.rumbo.favs.business.bean.search;
+package com.rumbo.favs.data.dao.mock.impl;
 
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;

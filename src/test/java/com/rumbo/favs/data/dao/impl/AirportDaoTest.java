@@ -17,6 +17,7 @@ public class AirportDaoTest {
 	@BeforeClass
 	public static void initialize()
 	{
+		// GIVEN
 		airportDao = new AirportDaoImpl();
 	}
 

@@ -1,15 +1,10 @@
 package com.rumbo.favs.data.dao.impl;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
-import com.rumbo.favs.data.entities.Airport;
-import com.rumbo.favs.data.entities.InfantPrice;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**
@@ -22,8 +17,7 @@ import com.rumbo.favs.data.entities.PassengerDiscount;
  */
 public class PassengerDiscountDaoImpl extends GenericDao implements IPassengerDiscountDao{
 	
-	private final String PASSENGERDISCOUNT_FILE = "src/main/resources/files/passengerDiscounts.csv";
-	
+	private final String PASSENGERDISCOUNT_FILE = "passengerDiscounts.csv";	
 	private Map<PassengerType,PassengerDiscount> passengerDiscounts = new HashMap<>();
 	
 	public PassengerDiscountDaoImpl(){

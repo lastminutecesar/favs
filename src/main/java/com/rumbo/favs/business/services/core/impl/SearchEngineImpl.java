@@ -56,7 +56,7 @@ public class SearchEngineImpl implements ISearchEngine{
 				}
 			}					
 			
-			return getResult(flightResultList);
+			return getAvailabilityResult(flightResultList);
 			
 		}catch(SearchCriteriaException e){
 			throw e;
@@ -69,7 +69,7 @@ public class SearchEngineImpl implements ISearchEngine{
 	 * @param flightResultList
 	 * @return AvailabilityResult search result
 	 */
-	private AvailabilityResult getResult(List<FlightResult> flightResultList){
+	private AvailabilityResult getAvailabilityResult(List<FlightResult> flightResultList){
 		
 		AvailabilityResult availabilityResult = new AvailabilityResult();
 		ResultType resultType = ResultType.OK;
