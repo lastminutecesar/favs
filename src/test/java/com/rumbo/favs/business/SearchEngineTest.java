@@ -31,7 +31,7 @@ import com.rumbo.favs.data.dao.impl.PassengerDiscountDaoImpl;
 import com.rumbo.favs.utilities.MyMath;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SearchTest {
+public class SearchEngineTest {
 	
 	private static ISearchEngine searchEngine;
 	
