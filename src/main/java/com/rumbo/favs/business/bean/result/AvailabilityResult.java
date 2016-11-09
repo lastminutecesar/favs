@@ -151,8 +151,7 @@ public class AvailabilityResult {
 	 * @param breakDownPrice
 	 * @return boolean If breakDownPrice has date departure 
 	 */
-	private boolean hasDiscount(BreakDownPrice breakDownPrice){
-		
+	private boolean hasDiscount(BreakDownPrice breakDownPrice){		
 		return breakDownPrice.getDateDiscount() > 0 || breakDownPrice.getPassengerDiscount() > 0;		
 	}	
 	

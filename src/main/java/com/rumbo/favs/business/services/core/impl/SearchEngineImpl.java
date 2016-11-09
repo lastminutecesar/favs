@@ -28,11 +28,11 @@ public class SearchEngineImpl implements ISearchEngine{
 	private Message message;
 	
 	public SearchEngineImpl(){
-		message = new Message();
+		this.message = new Message();
 	}
 
 	public SearchEngineImpl(IFlightDao flightDao, IFarePrice farePrice) {
-		message = new Message();
+		this.message = new Message();
 		this.flightDao = flightDao;
 		this.farePrice = farePrice;
 	}
