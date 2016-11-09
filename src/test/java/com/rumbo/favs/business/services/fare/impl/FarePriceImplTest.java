@@ -20,6 +20,7 @@ import com.rumbo.favs.data.dao.IDepartureDateDao;
 import com.rumbo.favs.data.dao.IInfantPriceDao;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.dao.impl.AirportDaoImpl;
+import com.rumbo.favs.data.dao.mock.impl.AirportDaoMockImpl;
 import com.rumbo.favs.data.dao.mock.impl.DepartureDateDaoMock;
 import com.rumbo.favs.data.dao.mock.impl.InfantPriceDaoMock;
 import com.rumbo.favs.data.dao.mock.impl.PassengerDiscountDaoMock;
@@ -45,7 +46,7 @@ public class FarePriceImplTest {
 		infantPriceDao = new InfantPriceDaoImpl();
 		passengerDiscountDao = new PassengerDiscountDaoImpl();*/
 		
-		airportDao = new AirportDaoImpl();
+		airportDao = new AirportDaoMockImpl();
 		departureDateDao = new DepartureDateDaoMock();
 		infantPriceDao = new InfantPriceDaoMock();
 		passengerDiscountDao = new PassengerDiscountDaoMock();

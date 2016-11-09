@@ -1,5 +1,7 @@
 package com.rumbo.favs.data.dao.mock.impl;
 
+import java.util.Arrays;
+
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;
 
@@ -10,9 +12,12 @@ public class AirportDaoMockImpl implements IAirportDao {
 	@Override
 	public Airport getAirportByIataCode(String iataCode) {
 		
-		if (iataCode.equals("MAD") ||  iataCode.equals("BCN")){
+		String names[] = {"BCN","MAD","LHR","CDH","FRA","IST","AMS","FCO","CPH"};
+		
+		if (Arrays.asList(names).contains(iataCode)){
 			return new Airport(iataCode, DUMMY_CITY);
 		}
+		
 		return null;
 	}
 
