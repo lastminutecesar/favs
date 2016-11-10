@@ -25,7 +25,7 @@ public class PassengerTypeDaoTest {
 	public void testA() {
 		
 		// WHEN
-		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.ADT);
+		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscountByPaxType(PassengerType.ADT);
 		
 		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(0f));
@@ -35,7 +35,7 @@ public class PassengerTypeDaoTest {
 	public void testB() {
 		
 		// WHEN
-		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.CHD);
+		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscountByPaxType(PassengerType.CHD);
 		
 		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(33f));
@@ -45,7 +45,7 @@ public class PassengerTypeDaoTest {
 	public void testC() {
 		
 		// WHEN
-		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscount(PassengerType.INF);
+		PassengerDiscount passengerDiscount = passengerDiscountDao.getDiscountByPaxType(PassengerType.INF);
 		
 		// THEN
 		assertThat(passengerDiscount.getDiscount(),is(0f));

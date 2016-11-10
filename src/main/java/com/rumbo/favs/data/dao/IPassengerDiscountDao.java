@@ -19,6 +19,6 @@ public interface IPassengerDiscountDao {
 	 * @param PassengerType passengerType
 	 * @return DiscountByPassengerType
 	 */
-	public PassengerDiscount getDiscount(PassengerType passengerType);
+	public PassengerDiscount getDiscountByPaxType(PassengerType passengerType);
 	
 }

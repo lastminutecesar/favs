@@ -25,7 +25,7 @@ public class InfantPriceDaoTest {
 	public void testA() {
 		
 		// WHEN
-		InfantPrice infantPrice = infantPriceDao.getInfantPriceByAirline("IB");
+		InfantPrice infantPrice = infantPriceDao.getDiscountByAirline("IB");
 		
 		// THEN
 		assertThat(infantPrice.getPrice(),is(10f));
@@ -35,7 +35,7 @@ public class InfantPriceDaoTest {
 	public void testB() {
 		
 		// WHEN
-		InfantPrice infantPrice = infantPriceDao.getInfantPriceByAirline("U2");
+		InfantPrice infantPrice = infantPriceDao.getDiscountByAirline("U2");
 		
 		// THEN
 		assertThat(infantPrice.getPrice(),is(19.90f));
@@ -45,7 +45,7 @@ public class InfantPriceDaoTest {
 	public void testC() {
 		
 		// WHEN
-		InfantPrice infantPrice = infantPriceDao.getInfantPriceByAirline("I2");
+		InfantPrice infantPrice = infantPriceDao.getDiscountByAirline("I2");
 		
 		// THEN
 		assertNull(infantPrice);

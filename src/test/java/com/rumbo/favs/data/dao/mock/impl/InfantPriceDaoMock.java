@@ -22,7 +22,7 @@ public class InfantPriceDaoMock implements IInfantPriceDao{
 	 * @param String airline
 	 * @return InfantPrice
 	 */
-	public InfantPrice getInfantPriceByAirline(String airline) {
+	public InfantPrice getDiscountByAirline(String airline) {
 		
 		switch(airline){
 		case "IB":

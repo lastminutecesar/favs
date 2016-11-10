@@ -38,7 +38,7 @@ public class PassengerDiscountDaoImpl extends GenericDao implements IPassengerDi
 	 * @param String iataCode
 	 * @return InfantPrice
 	 */
-	public PassengerDiscount getDiscount(PassengerType passengerType) {
+	public PassengerDiscount getDiscountByPaxType(PassengerType passengerType) {
 					
 		if (passengerType != null){		    
 			return passengerDiscounts.get(passengerType);

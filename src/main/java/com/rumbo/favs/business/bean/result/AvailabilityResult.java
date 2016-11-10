@@ -45,7 +45,7 @@ public class AvailabilityResult {
 				
 				response.append(flightResult.getFlight()).append(comma).append(space).
 					append(MyMath.getRoundedFloat(flightResult.getTotalAmount())).append(euro);
-				response.append(getTravellerPriceListText(flightResult.getTravellerPriceList()));
+				response.append(getTPListText(flightResult.getTravellerPriceList()));
 				response.append(newLine);
 			}
 			
@@ -59,7 +59,7 @@ public class AvailabilityResult {
 	 * @param travellerPriceList
 	 * @return StringBuffer text of breakdown price of all passenger type in a flight
 	 */
-	private StringBuffer getTravellerPriceListText(List<TravellerPrice> travellerPriceList){
+	private StringBuffer getTPListText(List<TravellerPrice> travellerPriceList){
 		
 		StringBuffer response = new StringBuffer();
 		StringBuffer responseAux = new StringBuffer();	
@@ -78,7 +78,7 @@ public class AvailabilityResult {
 			}else{
 				responseAux.append(plus);
 			}
-			responseAux.append(getTravellerPriceText(travellerPrice));
+			responseAux.append(getTPText(travellerPrice));
 		}
 		
 		responseAux.append(parenthesisClose);		
@@ -94,7 +94,7 @@ public class AvailabilityResult {
 	 * @param travellerPrice
 	 * @return String text of breakdown price of a passenger type
 	 */
-	private String getTravellerPriceText(TravellerPrice travellerPrice){
+	private String getTPText(TravellerPrice travellerPrice){
 		
 		if (travellerPrice != null && travellerPrice.getNumber() > 0){
 			StringBuffer response = new StringBuffer();

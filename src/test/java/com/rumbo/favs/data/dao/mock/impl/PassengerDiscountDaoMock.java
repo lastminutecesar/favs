@@ -24,7 +24,7 @@ public class PassengerDiscountDaoMock implements IPassengerDiscountDao{
 	 * @param String iataCode
 	 * @return InfantPrice
 	 */
-	public PassengerDiscount getDiscount(PassengerType passengerType) {
+	public PassengerDiscount getDiscountByPaxType(PassengerType passengerType) {
 					
 		switch(passengerType){
 			case ADT:

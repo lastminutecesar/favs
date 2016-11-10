@@ -59,7 +59,7 @@ public class FarePriceImpl implements IFarePrice{
 		Float totalAmount = 0f;
 		
 		List<TravellerPrice> travellerPriceList = getTravellerPriceList(airLine, basePrice, searchCriteria);				
-		totalAmount = getTotalAmountByFlight(travellerPriceList);	
+		totalAmount = getAmountByFlight(travellerPriceList);	
 		
 		return new FlightResult(flightNumber, totalAmount, travellerPriceList);		
 	}
@@ -70,7 +70,7 @@ public class FarePriceImpl implements IFarePrice{
 	 * @param travellerPriceList
 	 * @return
 	 */
-	private float getTotalAmountByFlight(List<TravellerPrice> travellerPriceList){
+	private float getAmountByFlight(List<TravellerPrice> travellerPriceList){
 			
 		float totalAmount = 0f;
 		
@@ -122,7 +122,7 @@ public class FarePriceImpl implements IFarePrice{
 			if(numPassengers > 0){	
 				if (passengerType.equals(PassengerType.INF)){
 					applyDateDiscount = false;
-					InfantPrice infantPrice = infantPricesDao.getInfantPriceByAirline(airline);
+					InfantPrice infantPrice = infantPricesDao.getDiscountByAirline(airline);
 					
 					if (infantPrice != null){
 						basePriceAux = infantPrice.getPrice();
@@ -136,7 +136,7 @@ public class FarePriceImpl implements IFarePrice{
 		}	
 		
 		if (travellerPriceList.size() > 0){
-			setTotalAmountByPassengerType(travellerPriceList);
+			setAmountByPaxType(travellerPriceList);
 		}
 		
 		return travellerPriceList;		
@@ -147,10 +147,10 @@ public class FarePriceImpl implements IFarePrice{
 	 * 
 	 * @param travellerPriceList
 	 */
-	private void setTotalAmountByPassengerType(List<TravellerPrice> travellerPriceList){
+	private void setAmountByPaxType(List<TravellerPrice> travellerPriceList){
 				
 		for (TravellerPrice travellerPrice: travellerPriceList){
-			getTravellerPriceAmount(travellerPrice);
+			getTravellerAmount(travellerPrice);
 		}
 	}
 	
@@ -159,7 +159,7 @@ public class FarePriceImpl implements IFarePrice{
 	 * 
 	 * @param travellerPrice
 	 */
-	private void getTravellerPriceAmount(TravellerPrice travellerPrice){
+	private void getTravellerAmount(TravellerPrice travellerPrice){
 		
 		if (travellerPrice != null && travellerPrice.getNumber() > 0){
 			
@@ -175,13 +175,13 @@ public class FarePriceImpl implements IFarePrice{
 		float amount = 0;
 		
 		if (travellerPrice != null){
-			amount = getAmountDepDiscount(travellerPrice);			
-			amount = getAmountPaxDiscount(travellerPrice,amount);
+			amount = getDepartureDiscount(travellerPrice);			
+			amount = getPaxDiscount(travellerPrice,amount);
 		}			
 		return amount;
 	}
 	
-	private float getAmountDepDiscount (TravellerPrice travellerPrice){
+	private float getDepartureDiscount (TravellerPrice travellerPrice){
 
 		if (travellerPrice != null && travellerPrice.getBreakDownPrice() != null && travellerPrice.getBreakDownPrice().getDateDiscount() > 0){
 				return (float) (travellerPrice.getBreakDownPrice().getDateDiscount() * travellerPrice.getBreakDownPrice().getBasePrice()) / 100;
@@ -190,7 +190,7 @@ public class FarePriceImpl implements IFarePrice{
 		}	
 	}
 	
-	private float getAmountPaxDiscount (TravellerPrice travellerPrice, float amount){
+	private float getPaxDiscount (TravellerPrice travellerPrice, float amount){
 
 		if (travellerPrice != null && travellerPrice.getBreakDownPrice() != null && travellerPrice.getBreakDownPrice().getPassengerDiscount() > 0){
 			return (float) ((100 - travellerPrice.getBreakDownPrice().getPassengerDiscount()) * amount) / 100;
@@ -217,7 +217,7 @@ public class FarePriceImpl implements IFarePrice{
 	
 	private float getDateDiscount(int daysToDeparture, PassengerType passengerType){
 		
-		DepartureDate departureDate = daysToDepartureDateDao.getDiscount(daysToDeparture);	
+		DepartureDate departureDate = daysToDepartureDateDao.getDiscountByDays(daysToDeparture);	
 		
 		if (departureDate != null){
 			return departureDate.getDiscount();
@@ -227,7 +227,7 @@ public class FarePriceImpl implements IFarePrice{
 	
 	private float getPassengerDiscount(PassengerType passengerType){
 		
-		PassengerDiscount passengerDiscount = discountByPassengerTypeDao.getDiscount(passengerType);	
+		PassengerDiscount passengerDiscount = discountByPassengerTypeDao.getDiscountByPaxType(passengerType);	
 		
 		if (passengerDiscount != null){
 			return passengerDiscount.getDiscount();

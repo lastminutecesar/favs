@@ -25,7 +25,7 @@ public class DepartureDateDaoTest {
 	public void testA() {
 		
 		// WHEN
-		DepartureDate departureDate = departureDateDao.getDiscount(0);
+		DepartureDate departureDate = departureDateDao.getDiscountByDays(0);
 		
 		// THEN
 		assertThat(departureDate.getDiscount(),is(150f));
@@ -35,7 +35,7 @@ public class DepartureDateDaoTest {
 	public void testB() {
 		
 		// WHEN
-		DepartureDate departureDate = departureDateDao.getDiscount(7);
+		DepartureDate departureDate = departureDateDao.getDiscountByDays(7);
 		
 		// THEN
 		assertThat(departureDate.getDiscount(),is(120f));
@@ -45,7 +45,7 @@ public class DepartureDateDaoTest {
 	public void testC() {
 		
 		// WHEN
-		DepartureDate departureDate = departureDateDao.getDiscount(25);
+		DepartureDate departureDate = departureDateDao.getDiscountByDays(25);
 		
 		// THEN
 		assertThat(departureDate.getDiscount(),is(100f));
@@ -55,7 +55,7 @@ public class DepartureDateDaoTest {
 	public void testD() {
 		
 		// WHEN
-		DepartureDate departureDate = departureDateDao.getDiscount(100);
+		DepartureDate departureDate = departureDateDao.getDiscountByDays(100);
 		
 		// THEN
 		assertThat(departureDate.getDiscount(),is(80f));
@@ -65,7 +65,7 @@ public class DepartureDateDaoTest {
 	public void testE() {
 		
 		// WHEN
-		DepartureDate departureDate = departureDateDao.getDiscount(366);
+		DepartureDate departureDate = departureDateDao.getDiscountByDays(366);
 		
 		// THEN
 		assertNull(departureDate);

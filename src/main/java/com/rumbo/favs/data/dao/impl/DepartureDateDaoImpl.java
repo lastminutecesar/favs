@@ -39,7 +39,7 @@ public class DepartureDateDaoImpl extends GenericDao implements IDepartureDateDa
 	 * @param int days
 	 * @return DaysToDepartureDate
 	 */
-	public DepartureDate getDiscount(int days) {
+	public DepartureDate getDiscountByDays(int days) {
 	
 		for(DepartureDate departureDate : departureDates){
 			if(departureDate.getMin() <= days && departureDate.getMax() >= days){

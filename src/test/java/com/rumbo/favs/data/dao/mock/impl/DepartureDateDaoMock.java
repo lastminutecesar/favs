@@ -22,7 +22,7 @@ public class DepartureDateDaoMock implements IDepartureDateDao{
 	 * @param int days
 	 * @return DaysToDepartureDate
 	 */
-	public DepartureDate getDiscount(int days) {
+	public DepartureDate getDiscountByDays(int days) {
 		
 		if (0 <= days && 2 >= days){
 			return new DepartureDate(DUMMY_DAY,DUMMY_DAY,150);

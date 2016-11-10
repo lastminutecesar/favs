@@ -37,7 +37,7 @@ public class InfantPriceDaoImpl extends GenericDao implements IInfantPriceDao{
 	 * @param String airline
 	 * @return InfantPrice
 	 */
-	public InfantPrice getInfantPriceByAirline(String airline) {
+	public InfantPrice getDiscountByAirline(String airline) {
 		
 		if (airline != null && !airline.isEmpty()){		    
 		    return infantPrices.get(airline);

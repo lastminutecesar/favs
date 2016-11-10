@@ -19,6 +19,6 @@ public interface IDepartureDateDao {
 	 * @param int days
 	 * @return DaysToDepartureDate
 	 */
-	public DepartureDate getDiscount(int days);
+	public DepartureDate getDiscountByDays(int days);
 	
 }
