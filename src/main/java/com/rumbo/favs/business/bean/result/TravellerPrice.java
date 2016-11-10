@@ -1,6 +1,6 @@
 package com.rumbo.favs.business.bean.result;
 
-import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.enums.PassengerType;
 
 /**
  * Price info of a passenger type

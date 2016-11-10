@@ -7,7 +7,7 @@ import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.AvailabilityResult;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.business.enums.result.ResultType;
+import com.rumbo.favs.business.enums.ResultType;
 import com.rumbo.favs.business.services.core.ISearchEngine;
 import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.data.dao.IFlightDao;

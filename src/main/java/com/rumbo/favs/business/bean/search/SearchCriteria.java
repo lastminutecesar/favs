@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.entities.Airport;
 

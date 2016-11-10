@@ -1,6 +1,6 @@
 package com.rumbo.favs.data.dao;
 
-import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 
 /**

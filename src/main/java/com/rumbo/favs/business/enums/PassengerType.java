@@ -1,4 +1,4 @@
-package com.rumbo.favs.business.bean;
+package com.rumbo.favs.business.enums;
 
 /**
  * Allowed passenger types

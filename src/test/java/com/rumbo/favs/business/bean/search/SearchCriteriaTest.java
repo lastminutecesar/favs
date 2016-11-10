@@ -5,8 +5,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.data.dao.IAirportDao;
 import com.rumbo.favs.data.dao.mock.impl.AirportDaoMockImpl;
 

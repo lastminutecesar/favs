@@ -12,13 +12,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 
-import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.exceptions.search.SearchCriteriaException;
 import com.rumbo.favs.business.bean.result.AvailabilityResult;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.search.Itinerary;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
-import com.rumbo.favs.business.enums.result.ResultType;
+import com.rumbo.favs.business.enums.PassengerType;
+import com.rumbo.favs.business.enums.ResultType;
 import com.rumbo.favs.business.services.core.ISearchEngine;
 import com.rumbo.favs.business.services.core.impl.SearchEngineImpl;
 import com.rumbo.favs.business.services.fare.IFarePrice;

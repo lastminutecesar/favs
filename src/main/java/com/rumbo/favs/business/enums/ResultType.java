@@ -1,4 +1,4 @@
-package com.rumbo.favs.business.enums.result;
+package com.rumbo.favs.business.enums;
 
 /**
  * Allowed search's result type

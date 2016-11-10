@@ -3,7 +3,7 @@ package com.rumbo.favs.data.dao.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 

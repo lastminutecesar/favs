@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.rumbo.favs.business.bean.PassengerType;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.data.dao.IPassengerDiscountDao;
 import com.rumbo.favs.data.entities.PassengerDiscount;
 

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.rumbo.favs.business.bean.PassengerType;
 import com.rumbo.favs.business.bean.result.BreakDownPrice;
 import com.rumbo.favs.business.bean.result.FlightResult;
 import com.rumbo.favs.business.bean.result.TravellerPrice;
 import com.rumbo.favs.business.bean.search.SearchCriteria;
+import com.rumbo.favs.business.enums.PassengerType;
 import com.rumbo.favs.business.services.fare.IFarePrice;
 import com.rumbo.favs.data.dao.IDepartureDateDao;
 import com.rumbo.favs.data.dao.IInfantPriceDao;
